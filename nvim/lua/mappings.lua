@@ -45,4 +45,4 @@ vim.cmd [[ autocmd TermOpen term://* lua set_terminal_keymaps() ]]
 -- buffer
 vim.cmd [[ nnoremap <Tab> : bnext!<CR> ]]
 vim.cmd [[ nnoremap <S-Tab> : bprevious!<CR> ]]
-map(mode.normal, "<C-d>", ":bdelete<CR>")
+map(mode.normal, "<leader>d", ":bdelete<CR>")
