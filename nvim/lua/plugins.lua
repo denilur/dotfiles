@@ -21,6 +21,9 @@ end
 return require('packer').startup(function()
   use { 'wbthomason/packer.nvim' }
 
+  -- tagbar
+  use { 'preservim/tagbar' }
+
   -- The Basics
   use { 'preservim/nerdcommenter' }
   use { 'jiangmiao/auto-pairs' }

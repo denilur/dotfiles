@@ -16,6 +16,9 @@ local opts = {
   flags = {
     debounce_text_changes = 150,
   },
+  settings = { gopls =  {
+    buildFlags =  {"-tags=test_unit"}
+  },
 }
 
 lsp_signature.setup {

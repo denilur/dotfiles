@@ -23,6 +23,12 @@ map(mode.normal, "<leader>=", "<C-W><C-=>")
 -- Nvim-tree
 map(mode.normal, "<leader>e", ":Neotree<CR>")
 
+-- tagbar
+map(mode.normal, "<leader>t", ":TagbarToggle<CR>")
+
+-- exec cmd
+map(mode.normal, "<leader>x", ":set splitright | vnew | set filetype=sh | read !sh #<CR>")
+
 -- Telescope
 map(mode.normal, "<leader>p", ":Telescope find_files hidden=true<CR>")
 map(mode.normal, "<leader>f", ":Telescope live_grep<CR>")
