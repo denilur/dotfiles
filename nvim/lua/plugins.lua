@@ -21,6 +21,13 @@ end
 return require('packer').startup(function()
   use { 'wbthomason/packer.nvim' }
 
+  use {'jdhao/better-escape.vim'}
+
+  use {
+    'lewis6991/gitsigns.nvim',
+    -- tag = 'release' -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
+  }
+
   -- tagbar
   use { 'preservim/tagbar' }
 
@@ -130,6 +137,4 @@ return require('packer').startup(function()
     config = get_setup("treesitter")
   }
 
-  -- Language-specific plugins
-  use { "kchmck/vim-coffee-script" }
 end)

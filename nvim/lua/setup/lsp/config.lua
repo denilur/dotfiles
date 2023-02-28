@@ -12,12 +12,8 @@ local opts = {
     keymaps.setup(client, bufnr)
   end,
 
-  capabilities = cmp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
   flags = {
     debounce_text_changes = 150,
-  },
-  settings = { gopls =  {
-    buildFlags =  {"-tags=test_unit"}
   },
 }
 

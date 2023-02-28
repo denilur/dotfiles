@@ -6,21 +6,6 @@ require('material').setup({
 		sign_column = false,
 		cursor_line = false,
 		non_current_windows = false,
-		popup_menu = false,
-	},
-
-	italics = {
-		comments = false,
-		keywords = false,
-		functions = false,
-		strings = false,
-		variables = false
-	},
-
-	contrast_filetypes = {
-		"terminal",
-		"packer",
-		"qf"
 	},
 
 	high_visibility = {
