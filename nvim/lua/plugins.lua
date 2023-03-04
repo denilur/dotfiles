@@ -22,17 +22,10 @@ return require('packer').startup(function()
   use { 'wbthomason/packer.nvim' }
 
   use {'jdhao/better-escape.vim'}
-
-  use {
-    'lewis6991/gitsigns.nvim',
-    -- tag = 'release' -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
-  }
-
   -- tagbar
   use { 'preservim/tagbar' }
 
   -- The Basics
-  use { 'preservim/nerdcommenter' }
   use { 'jiangmiao/auto-pairs' }
   use {
     "nvim-lualine/lualine.nvim",
@@ -69,7 +62,6 @@ return require('packer').startup(function()
     "akinsho/toggleterm.nvim",
     config = get_setup("toggleterm")
   }
-  use { "andymass/vim-matchup" }
 
   -- LSP
   use {
@@ -129,12 +121,5 @@ return require('packer').startup(function()
 
   -- Which-key
   use { "folke/which-key.nvim" }
-
-  -- Treesitter
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = get_setup("treesitter")
-  }
 
 end)

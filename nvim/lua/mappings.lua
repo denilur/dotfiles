@@ -29,6 +29,9 @@ map(mode.normal, "<leader>t", ":TagbarToggle<CR>")
 -- exec cmd
 map(mode.normal, "<leader>x", ":set splitright | vnew | set filetype=sh | read !sh #<CR>")
 
+-- trobule toggle
+map(mode.normal, "tt", ":TroubleToggle<CR>")
+
 -- Telescope
 map(mode.normal, "<leader>p", ":Telescope find_files hidden=true<CR>")
 map(mode.normal, "<leader>f", ":Telescope live_grep<CR>")

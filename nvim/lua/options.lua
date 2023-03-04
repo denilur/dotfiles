@@ -15,5 +15,8 @@ opt.sw = 2
 opt.ts = 2
 opt.sts = 2
 opt.clipboard='unnamedplus'
+opt.list = true
+opt.listchars = "eol:↲,tab:» ,trail:·,extends:<,precedes:>,conceal:┊,nbsp:␣"
+opt.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
 
 vim.o.signcolumn = "number"
