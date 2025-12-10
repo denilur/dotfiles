@@ -1,0 +1,37 @@
+[window]
+opacity = 0.99
+decorations = "None" 
+option_as_alt = "Both"
+
+[font]
+size = 18
+
+[font.bold]
+style = "Bold"
+family = "JetBrainsMono Nerd Font"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+[font.italic]
+style = "Italic"
+
+[font.normal]
+style = "Regular"
+family = "JetBrainsMono Nerd Font"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "Return"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
