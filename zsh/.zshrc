@@ -104,10 +104,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export GOBIN="$HOME/go/bin"
-export GOINSECURE="*.citydrive.ru/*"
-export GONOPROXY="*.citydrive.ru/*"
-export GONOSUMDB="*.citydrive.ru/*"
-export GOPRIVATE="*.citydrive.ru/*"
 export GOPATH="$HOME/go"
 PATH="$GOPATH/bin:$PATH"
 export PATH=$PATH:/usr/local/go/bin
