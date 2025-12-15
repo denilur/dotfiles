@@ -150,6 +150,50 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts_extend = { "spec" },
+    keys = {
+      {
+        "<leader>s",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Strings",
+      },
+      {
+        "<leader>d",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Diagnostics",
+      },
+      {
+        "<leader>f",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Find",
+      },
+      {
+        "<leader>g",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Git",
+      },
+      {
+        "<leader>c",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Code",
+      },
+      {
+        "<localleader>g",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Golang",
+      },
+    },
     opts = {
       preset = "helix",
       spec = {

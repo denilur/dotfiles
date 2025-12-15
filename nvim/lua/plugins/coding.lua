@@ -64,7 +64,7 @@ return {
   "nvim-lua/plenary.nvim",
   {
     "neovim/nvim-lspconfig",
-    event = "BufReadPre",
+    event = "VeryLazy",
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
@@ -73,144 +73,30 @@ return {
     documentFormatting = true,
   },
     config = function()
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-
       -- Mappings.
       local opts = { buffer = bufnr, noremap = true, silent = true }
       -- Навигация
-      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+     -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+      --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 
       vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, { desc = "Code action" })
-      vim.keymap.set('n', '<leader>l', function() vim.lsp.buf.format({ async = true }) end, opts)
+      vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end, {desc = "Format"})
 
       -- Диагностика
       vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
-      vim.keymap.set('n', '<leader>sl', function()
-          vim.lsp.buf.code_action {
-            apply = true,
-            filter = function(x)
-              return x.kind == "refactor.rewrite.splitLines"
-            end,
-          }
-        end,
-        { buffer = true }
-      )
+      vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, { desc = "signature of function"})
 
-      vim.keymap.set("n", "<leader>oi", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "source.organizeImports"
-          end,
-        }
-      end, {
-        buffer = true,
-      }
-      )
-
-      vim.keymap.set("n", "<leader>fs", function()
-        vim.lsp.buf.code_action {
-          filter = function(x)
-            return x.kind == "refactor.rewrite.fillStruct"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set("n", "<leader>fS", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.rewrite.fillStruct"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>em", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.method"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>ef", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.function"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>eC", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.constant-all"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>ec", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.constant"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>eV", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.variable-all"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      vim.keymap.set({ "v", "s" }, "<leader>ev", function()
-        vim.lsp.buf.code_action {
-          apply = true,
-          filter = function(x)
-            return x.kind == "refactor.extract.variable"
-          end,
-        }
-      end, {
-        buffer = true,
-      })
-
-      -- Signature of function
-      vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts)
-
-      vim.keymap.set('n', '<leader>ga', function()
+      vim.keymap.set('n', '<localleader>ga', function()
         local current_file = vim.fn.expand('%')
         if current_file:match('_test%.go$') then
           vim.cmd('e ' .. current_file:gsub('_test%.go$', '.go'))
         else
           vim.cmd('e ' .. current_file:gsub('%.go$', '_test.go'))
         end
-      end, opts)
+      end, {desc = "go alternative file"})
     end
   },
   {
@@ -285,27 +171,28 @@ return {
                 rangeVariableTypes = true,
             },
             analyses = {
-              unusedparams = true,
-              unusedwrite = true,
-              shadow = true,
+              recursiveiter = true,
+              maprange = true,
+              framepointer = true,
+              modernize = true,
               nilness = true,
-              unusedvariable = true,
-              useany = true,
-              defer = true,
-              stringintconv = true,
-              nilfunc = true,
-              printf = true,
-              structtag = true,
-              testinggoroutine = true,
+              hostport = true,
+              gofix = true,
+              sigchanyzer = true,
+              stdversion = true,
               unreachable = true,
-              unsafeptr = true,
-              unusedresult = true,
+              unusedfunc = true,
+              unusedparams = true,
+              unusedvariable = true,
+              unusedwrite = true,
+              useany = true,
             },
-            staticcheck = false,
+            staticcheck = true,
             gofumpt = true,
             completeUnimported = true,
             usePlaceholders = false,
             semanticTokens = false,
+            diagnosticsDelay = "250ms",
             annotations = {
               bounds = true,
               escape = true,
