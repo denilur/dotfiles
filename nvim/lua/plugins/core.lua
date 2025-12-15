@@ -1,12 +1,12 @@
 return {
   {
-    "p00f/alabaster.nvim",
+    "IlyasYOY/theme.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("alabaster")
+        vim.cmd.colorscheme("ilyasyoy")
     end,
-  },
+ },
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -43,7 +43,6 @@ return {
       lualine.setup {
         options = {
           icons_enabled = true,
-          theme = 'alabaster',
           component_separators = { left = '', right = '' },
           section_separators = { left = '', right = '' },
           disabled_filetypes = {
