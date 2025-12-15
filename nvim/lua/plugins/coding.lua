@@ -152,6 +152,13 @@ return {
         lsp_cfg = false,   -- Важно: отключаем автоматическую настройку LSP
         lsp_on_attach = false,
         tag_transform = false,
+
+        golangci_lint = {
+          config = vim.fn.expand("~/.config/.golangci.yml"),  -- ваш конфиг
+          default = "standard",  -- default preset
+          disable = {},  -- отключаемые линтеры
+          no_config = false,  -- игнорировать локальные конфиги
+        },
       })
 
       -- Настройка LSP для Go
