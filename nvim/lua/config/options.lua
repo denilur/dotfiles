@@ -2,15 +2,33 @@ local opt = vim.opt
 opt.confirm = true
 opt.cursorline = true
 opt.hlsearch = true
+opt.smarttab = true
+opt.smartindent = true
 opt.expandtab = true
 opt.number = true
 opt.relativenumber = true
 
-vim.opt.tabstop = 2
-vim.opt.swapfile = false
-vim.opt.shiftwidth = 2
+opt.tabstop = 2
+opt.softtabstop = 2
+opt.swapfile = false
+opt.shiftwidth = 2
 
-vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+opt.completeopt = {'menu', 'menuone', 'noselect'}
+opt.fillchars = { eob = " " } -- Убрать символ ~ в конце буфера (визуальный мусор)
+
+opt.ignorecase = true -- Игнорировать регистр при поиске
+opt.smartcase = true -- Но учитывать, если в запросе есть заглавные буквы
+
+opt.termguicolors = true -- Поддержка 24-bit цветов
+opt.mouse = "a" -- Включить мышь во всех режимах
+opt.wrap = true -- Автоматический перенос длинных строк
+
+opt.undofile = true -- Сохранять историю отмен между сессиями
+opt.swapfile = false -- Отключить swap-файлы (они раздражают)
+opt.fileencoding = "utf-8" -- Кодировка файлов
+opt.clipboard = "unnamedplus" -- Использовать системный буфер обмена
+
+opt.timeoutlen = 400 -- Время ожидания комбинаций клавиш (мс)
 
 vim.diagnostic.config({
   signs = true,

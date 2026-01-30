@@ -8,12 +8,15 @@ tms() {
 }
 
 aider-base() {
-	aider \
-		--pretty \
-		--stream \
-		--notifications \
-		--dark-mode \
-		--no-show-model-warnings \
-		--edit-format diff \
-		"$@"
+  aider \
+    --watch-files \
+    --pretty \
+    --stream \
+    --notifications \
+    --dark-mode \
+    --no-show-model-warnings \
+    --no-auto-commits \
+    --no-dirty-commits \
+    --edit-format diff \
+    "$@"
 }
