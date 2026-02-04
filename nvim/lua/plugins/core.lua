@@ -1,4 +1,39 @@
 return {
+  {
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    event = "VeryLazy",
+    keys = {
+      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Предыдущий буфер" },
+      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Следующий буфер" },
+      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Предыдущий буфер" },
+      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Следующий буфер" },
+      { "<S-t>", "<cmd>:tabnew<cr>", desc = "Новый буфер" },
+      { "<S-x>", "<cmd>:tabclose<cr>", desc = "Закрыть буфер" },
+    },
+    opts = {
+      options = {
+        mode = "tabs", -- Устанавливает режим отображения "tabs" (вкладки) или "buffers" (буферы)
+        separator_style = "slant", -- Стиль разделителя: "slant", "padded_slant", "thick", "thin"
+        diagnostics = "nvim_lsp", -- Показывать диагностику LSP на вкладках
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "Файлы",
+            highlight = "Directory",
+            text_align = "left",
+          },
+        },
+        color_icons = true, -- Раскрашивать иконки в соответствии с типом файла
+        show_buffer_close_icons = true,
+        show_close_icon = true,
+      },
+    },
+    config = function(_, opts)
+      require("bufferline").setup(opts)
+    end,
+  },
  {
   "folke/tokyonight.nvim",
   lazy = false,
