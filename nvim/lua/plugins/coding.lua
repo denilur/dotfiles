@@ -18,11 +18,6 @@ return {
       require("mason-lspconfig").setup({
         automatic_installation = true,
       })
-      require("mason-lspconfig").setup_handlers({
-        function(server_name)
-          require("lspconfig")[server_name].setup({})
-        end,
-      })
     end,
   },
   {
@@ -140,85 +135,100 @@ return {
   {
     "ray-x/go.nvim",
     dependencies = {
-      "ray-x/guihua.lua",
-      "neovim/nvim-lspconfig",
-      "hrsh7th/nvim-cmp",
+        "ray-x/guihua.lua",
+        "neovim/nvim-lspconfig", -- Оставляем, так как go.nvim может его использовать
+        "hrsh7th/nvim-cmp",
     },
     ft = { "go", "gomod" },
     config = function()
-      require("go").setup({
-        goimport = "goimports",
-        gofmt = "gopls",
-        lsp_cfg = false,   -- Важно: отключаем автоматическую настройку LSP
-        lsp_on_attach = false,
-        tag_transform = false,
-
-        golangci_lint = {
-          config = vim.fn.expand("~/.config/.golangci.yml"),  -- ваш конфиг
-          default = "standard",  -- default preset
-          disable = {},  -- отключаемые линтеры
-          no_config = false,  -- игнорировать локальные конфиги
-        },
-      })
-
-      -- Настройка LSP для Go
-      local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      lspconfig.gopls.setup({
-        capabilities = capabilities,
-        settings = {
-          gopls = {
-            hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
+        require("go").setup({
+            goimport = "goimports",
+            gofmt = "gopls",
+            lsp_cfg = false,   -- Важно: отключаем автоматическую настройку LSP
+            lsp_on_attach = false,
+            tag_transform = false,
+            
+            golangci_lint = {
+                config = vim.fn.expand("~/.config/.golangci.yml"),
+                default = "standard",
+                disable = {},
+                no_config = false,
             },
-            analyses = {
-              recursiveiter = true,
-              maprange = true,
-              framepointer = true,
-              modernize = true,
-              nilness = true,
-              hostport = true,
-              gofix = true,
-              sigchanyzer = true,
-              stdversion = true,
-              unreachable = true,
-              unusedfunc = true,
-              unusedparams = true,
-              unusedvariable = true,
-              unusedwrite = true,
-              useany = true,
+        })
+        
+        -- 1. Настройка capabilities для autocompletion (через nvim-cmp)
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        
+        -- 2. Определение обработчика on_attach (можно сделать отдельной функцией для переиспользования)
+        local go_on_attach = function(client, bufnr)
+            -- Форматирование при сохранении (ваш существующий код)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = bufnr,
+                callback = function()
+                    vim.lsp.buf.format({ async = false })
+                end,
+            })
+            
+            -- Можно добавить другие keymaps для Go
+            local opts = { buffer = bufnr, silent = true }
+            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+            vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+            vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        end
+        
+        -- 3. Настройка gopls через новый API
+        vim.lsp.config('gopls', {
+            capabilities = capabilities, -- Подключаем autocompletion
+            on_attach = go_on_attach,    -- Подключаем наш обработчик
+            
+            -- Все ваши настройки остаются прежними
+            settings = {
+                gopls = {
+                    hints = {
+                        assignVariableTypes = true,
+                        compositeLiteralFields = true,
+                        compositeLiteralTypes = true,
+                        constantValues = true,
+                        functionTypeParameters = true,
+                        parameterNames = true,
+                        rangeVariableTypes = true,
+                    },
+                    analyses = {
+                        recursiveiter = true,
+                        maprange = true,
+                        framepointer = true,
+                        modernize = true,
+                        nilness = true,
+                        hostport = true,
+                        gofix = true,
+                        sigchanyzer = true,
+                        stdversion = true,
+                        unreachable = true,
+                        unusedfunc = true,
+                        unusedparams = true,
+                        unusedvariable = true,
+                        unusedwrite = true,
+                        useany = true,
+                    },
+                    staticcheck = true,
+                    gofumpt = true,
+                    completeUnimported = true,
+                    usePlaceholders = false,
+                    semanticTokens = false,
+                    diagnosticsDelay = "250ms",
+                    annotations = {
+                        bounds = true,
+                        escape = true,
+                        inline = true,
+                    },
+                },
             },
-            staticcheck = true,
-            gofumpt = true,
-            completeUnimported = true,
-            usePlaceholders = false,
-            semanticTokens = false,
-            diagnosticsDelay = "250ms",
-            annotations = {
-              bounds = true,
-              escape = true,
-              inline = true,
-            },
-          },
-        },
-        on_attach = function(client, bufnr)
-          -- Форматирование при сохранении
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.format({ async = false })
-            end,
-          })
-        end,
-      })
+        })
+        
+        -- 4. Включение сервера
+        vim.lsp.enable('gopls')
     end,
-  },
+},
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -256,5 +266,28 @@ return {
         desc = "Symbols (Trouble)",
       },
     },
-  }
+  },
+  { "tpope/vim-dadbod", lazy = true },
+   {
+        "kristijanhusak/vim-dadbod-ui",
+        lazy = true,
+        cmd = { "DB", "DBUI" },
+        ft = { "sql", "mysql", "plsql" },
+        config = function()
+            vim.g.db_ui_save_location = vim.fn.getcwd() .. "/sql/"
+        end,
+        dependencies = {
+            "tpope/vim-dadbod",
+            "kristijanhusak/vim-dadbod-completion",
+        },
+    },
+   {
+        "kristijanhusak/vim-dadbod-completion",
+        lazy = true,
+        config = function()
+            vim.cmd [[
+                autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+            ]]
+        end,
+    },
 }

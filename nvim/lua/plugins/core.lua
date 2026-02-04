@@ -1,12 +1,30 @@
 return {
-  {
-    "IlyasYOY/theme.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-        vim.cmd.colorscheme("ilyasyoy")
-    end,
- },
+ {
+  "folke/tokyonight.nvim",
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require("tokyonight").setup({
+      style = "night", -- или "storm", "moon", "day"
+      transparent = false, -- можно сделать прозрачным
+      styles = {
+        comments = { italic = true }, -- курсив для комментариев
+        keywords = { italic = false }, -- без курсива для ключевых слов
+        functions = { bold = true }, -- жирные функции
+        variables = { bold = false },
+      },
+      on_highlights = function(hl, c)
+        -- Кастомные настройки для Go
+        hl["@function.go"] = { fg = c.blue, bold = true }
+        hl["@method.go"] = { fg = c.cyan }
+        hl["@type.go"] = { fg = c.green }
+        hl["@struct.go"] = { fg = c.yellow }
+        hl["@interface.go"] = { fg = c.orange }
+      end,
+    })
+    vim.cmd("colorscheme tokyonight")
+  end,
+},
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -25,13 +43,13 @@ return {
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
   },
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    config = true
-    -- use opts = {} for passing setup options
-    -- this is equivalent to setup({}) function
-  },
+  -- {
+  --   'windwp/nvim-autopairs',
+  --   event = "InsertEnter",
+  --   config = true
+  --   -- use opts = {} for passing setup options
+  --   -- this is equivalent to setup({}) function
+  -- },
   {
     'onsails/lspkind-nvim',
   },
@@ -143,7 +161,12 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        renderer = {
+          root_folder_label = ":t",
+          highlight_opened_files = "name",
+        }
+      }
     end,
   },
   {
