@@ -42,3 +42,10 @@ vim.diagnostic.config({
     prefix = "●",
   },
 })
+
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = "▸ ",
+  leadmultispace = "│   ",  -- для нескольких пробелов
+  lead = "·",
+}
