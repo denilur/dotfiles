@@ -1,4 +1,18 @@
 return {
+    {
+    "sergei-durkin/sql-formatter.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+  },
+  {
+    'stevearc/aerial.nvim',
+    opts = {},
+    dependencies = {
+       "nvim-treesitter/nvim-treesitter",
+       "nvim-tree/nvim-web-devicons"
+    },
+  },
   {
     "williamboman/mason.nvim",
     cmd = "Mason",
@@ -173,7 +187,6 @@ return {
             local opts = { buffer = bufnr, silent = true }
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-            vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
         end
         
         -- 3. Настройка gopls через новый API

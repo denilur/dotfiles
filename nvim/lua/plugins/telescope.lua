@@ -6,22 +6,30 @@ return {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope-ui-select.nvim',
     'nvim-tree/nvim-web-devicons',
+    "nvim-telescope/telescope-file-browser.nvim",
   },
   keys = {
     { "gr", "<cmd>Telescope lsp_references<cr>",       desc = "References (Telescope)" },
-    { "gR", "<cmd>Telescope lsp_references<cr>",       desc = "References (Telescope)" },
+    { "<leader>e", function()
+        require("telescope").extensions.file_browser.file_browser({
+            path = vim.fn.expand("%:p:h"),
+        })
+    end, desc = "File Browser (current dir)" },
 
-    { "gd", "<cmd>Telescope lsp_definitions<cr>",      desc = "Goto Definition" },
     { "gi", "<cmd>Telescope lsp_implementations<cr>",  desc = "Goto Implementation" },
-    { "gt", "<cmd>Telescope lsp_type_definitions<cr>", desc = "Goto Type Definition" },
   },
   config = function()
     local actions = require("telescope.actions")
 
     require("telescope").setup {
+      extensions = {
+        file_browser = {
+          hijack_netrw = true,
+        }
+      },
       defaults = {
         sorting_strategy = "ascending",
-        layout_strategy = "horizontal",
+        layout_strategy = "vertical",
         layout_config = {
           horizontal = {
             preview_width = 0.6,
@@ -50,5 +58,6 @@ return {
         },
       }
     }
+    require("telescope").load_extension("file_browser")
   end
 }

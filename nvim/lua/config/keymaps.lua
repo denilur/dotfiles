@@ -15,9 +15,9 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 
-vim.keymap.set("i", "jk", "<esc>")
+map("n", "<localleader>gn", ":GoTestFunc<CR>", "Run test func")
 
-vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<cr>", { silent = true, noremap = true })
+vim.keymap.set("i", "jk", "<esc>")
 
 vim.keymap.set("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", {desc="Find files"})
 vim.keymap.set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>", {desc="Find in files"})
@@ -27,10 +27,6 @@ vim.keymap.set("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers
 vim.api.nvim_set_keymap("n", "<C-t>", "<cmd>lua require('toggleterm').toggle()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-t>", "<cmd>lua require('toggleterm').toggle()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("t", "<C-t>", "<cmd>lua require('toggleterm').toggle()<CR>", { noremap = true, silent = true })
-
--- Move highlighted blocks with J and K
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 vim.api.nvim_create_user_command('GoFieldAlign', function()
   local filename = vim.fn.expand('%:p')
