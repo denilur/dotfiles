@@ -6,17 +6,3 @@ tms() {
 		tmux attach -t "$selected_session" || tmux switch-client -t "$selected_session"
 	fi
 }
-
-aider-base() {
-  aider \
-    --watch-files \
-    --pretty \
-    --stream \
-    --notifications \
-    --dark-mode \
-    --no-show-model-warnings \
-    --no-auto-commits \
-    --no-dirty-commits \
-    --edit-format diff \
-    "$@"
-}

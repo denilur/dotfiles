@@ -48,7 +48,6 @@ setup_links_to_config_files() {
 
     # Main config links
     symlink "$DOTFILES_DIR/nvim" "$config_dir/nvim"
-    symlink "$DOTFILES_DIR/aichat" "$config_dir/aichat"
     symlink "$DOTFILES_DIR/alacritty" "$config_dir/alacritty"
 
     # Home directory links

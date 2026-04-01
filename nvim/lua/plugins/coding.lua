@@ -1,17 +1,55 @@
 return {
-    {
-    "sergei-durkin/sql-formatter.nvim",
+  {
+    "vinnymeller/swagger-preview.nvim",
+    cmd = { "SwaggerPreview", "SwaggerPreviewStop", "SwaggerPreviewToggle" },
+    build = "npm i",
+    config = true,
+  },
+
+  {
+    "Chaitanyabsprip/fastaction.nvim",
+    opts = {},
+  },
+  {
+    "stevearc/aerial.nvim",
+    keys = {
+      { "<localleader>a", "<cmd>AerialNavToggle<cr>", desc = "list code symbols" },
+    },
+    opts = {},
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
     },
   },
   {
-    'stevearc/aerial.nvim',
-    opts = {},
+    "mikavilpas/yazi.nvim",
+    version = "*",
+    event = "VeryLazy",
     dependencies = {
-       "nvim-treesitter/nvim-treesitter",
-       "nvim-tree/nvim-web-devicons"
+      { "nvim-lua/plenary.nvim", lazy = true },
     },
+    keys = {
+      { "//", "<cmd>Yazi<cr>", desc = "Open yazi at current file" },
+      { "<localleader>e", "<cmd>Yazi cwd<cr>", desc = "Open yazi at cwd" },
+    },
+    opts = {
+      open_for_directories = true,
+      enable_mouse_support = true,
+      floating_window_scaling_factor = 0.9,
+      yazi_floating_window_border = "rounded",
+      show_hidden = true,
+      focus_on_open = true,
+      keymaps = {
+        show_help = "<f1>",
+        open_file_in_vertical_split = "<c-v>",
+        open_file_in_horizontal_split = "<c-s>",
+        close = "q",
+      },
+    },
+    init = function()
+      vim.g.loaded_netrwPlugin = 1
+      vim.g.loaded_netrw = 1
+    end,
   },
   {
     "williamboman/mason.nvim",
@@ -25,14 +63,6 @@ return {
         },
       },
     },
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
-    config = function()
-      require("mason-lspconfig").setup({
-        automatic_installation = true,
-      })
-    end,
   },
   {
     "hrsh7th/nvim-cmp",
@@ -59,7 +89,6 @@ return {
           ["<C-k>"] = cmp.mapping.select_prev_item({
             behavior = cmp.ConfirmBehavior.Insert,
           }),
-
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
@@ -72,58 +101,11 @@ return {
   },
   "nvim-lua/plenary.nvim",
   {
-    "neovim/nvim-lspconfig",
-    event = "VeryLazy",
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp",
-    },
-      init_options = {
-    documentFormatting = true,
-  },
-    config = function()
-      -- Mappings.
-      local opts = { buffer = bufnr, noremap = true, silent = true }
-      -- Навигация
-     -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-      --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-
-      vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, { desc = "Code action" })
-      vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end, {desc = "Format"})
-
-      -- Диагностика
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-
-      vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, { desc = "signature of function"})
-
-      vim.keymap.set('n', '<localleader>ga', function()
-        local current_file = vim.fn.expand('%')
-        if current_file:match('_test%.go$') then
-          vim.cmd('e ' .. current_file:gsub('_test%.go$', '.go'))
-        else
-          vim.cmd('e ' .. current_file:gsub('%.go$', '_test.go'))
-        end
-      end, {desc = "go alternative file"})
-    end
-  },
-  {
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("gitsigns").setup {}
-      vim.keymap.set(
-        "n",
-        "<leader>gb",
-        "<cmd>Gitsigns blame_line<CR>",
-        { desc = "blame current line", noremap = true }
-      )
-      vim.keymap.set(
-        "n",
-        "<leader>gB",
-        "<cmd>Gitsigns blame<CR>",
-        { desc = "blame current file", noremap = true }
-      )
+      require("gitsigns").setup({})
+      vim.keymap.set("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", { desc = "blame current line", noremap = true })
+      vim.keymap.set("n", "<leader>gB", "<cmd>Gitsigns blame<CR>", { desc = "blame current file", noremap = true })
     end,
   },
   {
@@ -143,107 +125,12 @@ return {
     -- setting the keybinding for LazyGit with 'keys' is recommended in
     -- order to load the plugin when the command is run for the first time
     keys = {
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-    }
+      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
   },
   {
-    "ray-x/go.nvim",
-    dependencies = {
-        "ray-x/guihua.lua",
-        "neovim/nvim-lspconfig", -- Оставляем, так как go.nvim может его использовать
-        "hrsh7th/nvim-cmp",
-    },
-    ft = { "go", "gomod" },
-    config = function()
-        require("go").setup({
-            goimport = "goimports",
-            gofmt = "gopls",
-            lsp_cfg = false,   -- Важно: отключаем автоматическую настройку LSP
-            lsp_on_attach = false,
-            tag_transform = false,
-            
-            golangci_lint = {
-                config = vim.fn.expand("~/.config/.golangci.yml"),
-                default = "standard",
-                disable = {},
-                no_config = false,
-            },
-        })
-        
-        -- 1. Настройка capabilities для autocompletion (через nvim-cmp)
-        local capabilities = require("cmp_nvim_lsp").default_capabilities()
-        
-        -- 2. Определение обработчика on_attach (можно сделать отдельной функцией для переиспользования)
-        local go_on_attach = function(client, bufnr)
-            -- Форматирование при сохранении (ваш существующий код)
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.format({ async = false })
-                end,
-            })
-            
-            -- Можно добавить другие keymaps для Go
-            local opts = { buffer = bufnr, silent = true }
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        end
-        
-        -- 3. Настройка gopls через новый API
-        vim.lsp.config('gopls', {
-            capabilities = capabilities, -- Подключаем autocompletion
-            on_attach = go_on_attach,    -- Подключаем наш обработчик
-            
-            -- Все ваши настройки остаются прежними
-            settings = {
-                gopls = {
-                    hints = {
-                        assignVariableTypes = true,
-                        compositeLiteralFields = true,
-                        compositeLiteralTypes = true,
-                        constantValues = true,
-                        functionTypeParameters = true,
-                        parameterNames = true,
-                        rangeVariableTypes = true,
-                    },
-                    analyses = {
-                        recursiveiter = true,
-                        maprange = true,
-                        framepointer = true,
-                        modernize = true,
-                        nilness = true,
-                        hostport = true,
-                        gofix = true,
-                        sigchanyzer = true,
-                        stdversion = true,
-                        unreachable = true,
-                        unusedfunc = true,
-                        unusedparams = true,
-                        unusedvariable = true,
-                        unusedwrite = true,
-                        useany = true,
-                    },
-                    staticcheck = true,
-                    gofumpt = true,
-                    completeUnimported = true,
-                    usePlaceholders = false,
-                    semanticTokens = false,
-                    diagnosticsDelay = "250ms",
-                    annotations = {
-                        bounds = true,
-                        escape = true,
-                        inline = true,
-                    },
-                },
-            },
-        })
-        
-        -- 4. Включение сервера
-        vim.lsp.enable('gopls')
-    end,
-},
-  {
     "nvim-treesitter/nvim-treesitter",
+    lazy = true,
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
@@ -252,55 +139,27 @@ return {
       })
     end,
   },
+  { "tpope/vim-dadbod", lazy = true },
   {
-    "folke/trouble.nvim",
-    opts = {
-      modes = {
-        lsp = {
-          win = { position = "right" },
-        },
-      },
-    },   -- for default options, refer to the configuration section for custom setup.
-    cmd = "Trouble",
-    keys = {
-      {
-        "<leader>dd",
-        "<cmd>Trouble diagnostics toggle<cr>",
-        desc = "Diagnostics (Trouble)",
-      },
-      {
-        "<leader>dD",
-        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-        desc = "Buffer Diagnostics (Trouble)",
-      },
-      {
-        "<leader>cs",
-        "<cmd>Trouble symbols toggle focus=false<cr>",
-        desc = "Symbols (Trouble)",
-      },
+    "kristijanhusak/vim-dadbod-ui",
+    lazy = true,
+    cmd = { "DB", "DBUI" },
+    ft = { "sql", "mysql", "plsql" },
+    config = function()
+      vim.g.db_ui_save_location = vim.fn.getcwd() .. "/sql/"
+    end,
+    dependencies = {
+      "tpope/vim-dadbod",
+      "kristijanhusak/vim-dadbod-completion",
     },
   },
-  { "tpope/vim-dadbod", lazy = true },
-   {
-        "kristijanhusak/vim-dadbod-ui",
-        lazy = true,
-        cmd = { "DB", "DBUI" },
-        ft = { "sql", "mysql", "plsql" },
-        config = function()
-            vim.g.db_ui_save_location = vim.fn.getcwd() .. "/sql/"
-        end,
-        dependencies = {
-            "tpope/vim-dadbod",
-            "kristijanhusak/vim-dadbod-completion",
-        },
-    },
-   {
-        "kristijanhusak/vim-dadbod-completion",
-        lazy = true,
-        config = function()
-            vim.cmd [[
+  {
+    "kristijanhusak/vim-dadbod-completion",
+    lazy = true,
+    config = function()
+      vim.cmd([[
                 autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
-            ]]
-        end,
-    },
+            ]])
+    end,
+  },
 }

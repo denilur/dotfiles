@@ -1,8 +1,25 @@
-vim.api.nvim_create_user_command("AIChatCodeEdit", function(opts)
-  vim.cmd("'<,'>!aichat --code --role \\%nvim-code-edit\\% " .. opts.args)
-end, {
-  range = true,
-  nargs = 1,
-  desc = "Run AIChat code edit on the selected range with the provided arguments",
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end,
 })
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.sql", "*.sqlm" },
+  callback = function()
+    vim.cmd("silent !sqlfluff format % --write-output")
+  end,
+})
+
+    local function toggle_diagnostics()
+      local is_enabled= vim.diagnostic.is_enabled()
+
+      if is_enabled then
+        vim.diagnostic.enable(false)
+      else
+        vim.diagnostic.enable(true)
+      end
+    end
+
+    vim.keymap.set("n", "<leader>ud", toggle_diagnostics, { desc = "Toggle diagnostics" })

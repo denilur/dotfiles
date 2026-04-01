@@ -33,4 +33,4 @@ mods = "Control"
 [[keyboard.bindings]]
 action = "DecreaseFontSize"
 key = "Minus"
-mods = "Control"
+mods = "Command"

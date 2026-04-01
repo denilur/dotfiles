@@ -8,10 +8,19 @@ opt.expandtab = true
 opt.number = true
 opt.relativenumber = true
 
+opt.autowrite = true -- сохраняет файл при переключении буферов
+opt.autowriteall = true
+opt.autoread = true -- автоматически перечитывать файл, если изменен вне vim
+
+opt.showbreak = '↪' --  показывает символ ↪ в начале перенесенных строк
+opt.breakindent = true -- сохраняет отступ при переносе строки
+opt.copyindent = true -- копирует структуру отступов с предыдущей строки
+
 opt.tabstop = 2
 opt.softtabstop = 2
 opt.swapfile = false
 opt.shiftwidth = 2
+vim.opt.expandtab = true
 
 opt.completeopt = {'menu', 'menuone', 'noselect'}
 opt.fillchars = { eob = " " } -- Убрать символ ~ в конце буфера (визуальный мусор)
@@ -22,19 +31,28 @@ opt.smartcase = true -- Но учитывать, если в запросе ес
 opt.termguicolors = true -- Поддержка 24-bit цветов
 opt.mouse = "a" -- Включить мышь во всех режимах
 opt.wrap = false -- Автоматический перенос длинных строк
+opt.showmode = false -- Отключает отображение текущего режима (-- INSERT --) внизу, так как он уже есть в статус-линии
 
 opt.undofile = true -- Сохранять историю отмен между сессиями
 opt.swapfile = false -- Отключить swap-файлы (они раздражают)
 opt.fileencoding = "utf-8" -- Кодировка файлов
-opt.clipboard = "unnamedplus" -- Использовать системный буфер обмена
 
-opt.timeoutlen = 400 -- Время ожидания комбинаций клавиш (мс)
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.splitkeep = 'screen'
+
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
+
+opt.timeoutlen = 300 -- Время ожидания комбинаций клавиш (мс)
+opt.updatetime = 250
 
 opt.signcolumn = "yes"
 
 vim.diagnostic.config({
   signs = true,
-  update_in_insert = false,
+  update_in_insert = true,
   underline = true,
   virtual_text = {
     spacing = 4,
@@ -43,9 +61,22 @@ vim.diagnostic.config({
   },
 })
 
-vim.opt.list = true
-vim.opt.listchars = {
-  tab = "▸ ",
-  leadmultispace = "│   ",  -- для нескольких пробелов
-  lead = "·",
+opt.list = true
+opt.listchars = {
+  tab = ". ",
+  trail = '·',
+  nbsp = '␣',
 }
+
+opt.fillchars = {
+  eob = ' ',
+  lastline = ' ',
+  fold = ' ',
+}
+
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldlevel = 0
+vim.opt.foldlevelstart = 99
+vim.opt.foldtext = ''
+vim.o.winborder = "rounded"

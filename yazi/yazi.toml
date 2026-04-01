@@ -1,4 +1,7 @@
+[manager]
+show_hidden = true
+
 [opener]
 edit = [
-	{ run = 'nvim "$@"', block = true },
+    { run = 'nvim "$@"', block = true, desc = "Open in new Neovim" },
 ]
