@@ -12,43 +12,14 @@ return {
         settings = {},
       })
 
-      vim.lsp.config("gopls", {
-        settings = {
-          gopls = {
-            gofumpt = true,
-            codelenses = {
-                gc_details = false,
-                generate = true,
-                regenerate_cgo = true,
-                run_govulncheck = true,
-                test = true,
-                tidy = true,
-                upgrade_dependency = true,
-                vendor = true,
-              },
-              hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-              },
-              analyses = {
-                nilness = true,
-                unusedparams = true,
-                unusedwrite = true,
-                useany = true,
-              },
-              usePlaceholders = true,
-              completeUnimported = true,
-              staticcheck = true,
-              directoryFilters = { "-.git", "-.vscode", "-.idea", "-node_modules" },
-              semanticTokens = true,
-            },
-        },
-      })
+      vim.keymap.set('n', '<localleader>ga', function()
+        local current_file = vim.fn.expand('%')
+        if current_file:match('_test%.go$') then
+          vim.cmd('e ' .. current_file:gsub('_test%.go$', '.go'))
+        else
+          vim.cmd('e ' .. current_file:gsub('%.go$', '_test.go'))
+        end
+      end, {desc = "go alternative file"})
 
       vim.lsp.config("sqls", {
         settings = {
@@ -73,10 +44,13 @@ return {
       vim.lsp.config("jsonls", {})
 
       vim.lsp.enable("buf_ls")
-      vim.lsp.enable("gopls")
       vim.lsp.enable("sqls")
       vim.lsp.enable("lua_ls")
       vim.lsp.enable("jsonls")
+
+      vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end, {desc = "Format"})
+
+      vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, { desc = "signature of function"})
     end,
   },
   {
