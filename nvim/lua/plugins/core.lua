@@ -1,18 +1,5 @@
 return {
   {
-    "dchinmay2/alabaster.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.g.alabaster_dim_comments = false 
-      vim.g.alabaster_floatborder = true 
-
-      vim.opt.background = "light"
-
-      vim.cmd.colorscheme("alabaster")
-    end,
-  },
-  {
     "christoomey/vim-tmux-navigator",
     cmd = {
       "TmuxNavigateLeft",
@@ -30,51 +17,21 @@ return {
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
   },
-  -- {
-  --   'windwp/nvim-autopairs',
-  --   event = "InsertEnter",
-  --   config = true
-  --   -- use opts = {} for passing setup options
-  --   -- this is equivalent to setup({}) function
-  -- },
-  {
-    "onsails/lspkind-nvim",
-  },
   {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      local lualine = require("lualine")
-
-      lualine.setup({
+      require("lualine").setup({
         options = {
           icons_enabled = true,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
-          disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-          },
-          ignore_focus = {},
-          always_divide_middle = true,
-          always_show_tabline = true,
-          globalstatus = false,
+          globalstatus = true,
           refresh = {
             statusline = 1000,
             tabline = 1000,
             winbar = 1000,
-            refresh_time = 16, -- ~60fps
-            events = {
-              "WinEnter",
-              "BufEnter",
-              "BufWritePost",
-              "SessionLoadPost",
-              "FileChangedShellPost",
-              "VimResized",
-              "Filetype",
-              "CursorMoved",
-              "CursorMovedI",
-              "ModeChanged",
-            },
           },
         },
         sections = {
@@ -86,80 +43,13 @@ return {
           lualine_z = { "location" },
         },
         inactive_sections = {
-          lualine_a = {},
-          lualine_b = {},
           lualine_c = { "filename" },
           lualine_x = { "location" },
-          lualine_y = {},
-          lualine_z = {},
         },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = {},
       })
     end,
   },
-  {
-    "gbprod/yanky.nvim",
-    recommended = true,
-    desc = "Better Yank/Paste",
-    opts = {
-      highlight = { timer = 150 },
-    },
-    keys = {
-      -- stylua: ignore
-      { "y",  "<Plug>(YankyYank)",                      mode = { "n", "x" },                           desc = "Yank Text" },
-      {
-        "p",
-        "<Plug>(YankyPutAfter)",
-        mode = { "n", "x" },
-        desc = "Put Text After Cursor",
-      },
-      {
-        "P",
-        "<Plug>(YankyPutBefore)",
-        mode = { "n", "x" },
-        desc = "Put Text Before Cursor",
-      },
-      {
-        "gp",
-        "<Plug>(YankyGPutAfter)",
-        mode = { "n", "x" },
-        desc = "Put Text After Selection",
-      },
-      {
-        "gP",
-        "<Plug>(YankyGPutBefore)",
-        mode = { "n", "x" },
-        desc = "Put Text Before Selection",
-      },
-      { "[y", "<Plug>(YankyCycleForward)", desc = "Cycle Forward Through Yank History" },
-      { "]y", "<Plug>(YankyCycleBackward)", desc = "Cycle Backward Through Yank History" },
-      { "]p", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Put Indented After Cursor (Linewise)" },
-      { "[p", "<Plug>(YankyPutIndentBeforeLinewise)", desc = "Put Indented Before Cursor (Linewise)" },
-      { "]P", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Put Indented After Cursor (Linewise)" },
-      { "[P", "<Plug>(YankyPutIndentBeforeLinewise)", desc = "Put Indented Before Cursor (Linewise)" },
-      { ">p", "<Plug>(YankyPutIndentAfterShiftRight)", desc = "Put and Indent Right" },
-      { "<p", "<Plug>(YankyPutIndentAfterShiftLeft)", desc = "Put and Indent Left" },
-      { ">P", "<Plug>(YankyPutIndentBeforeShiftRight)", desc = "Put Before and Indent Right" },
-      { "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", desc = "Put Before and Indent Left" },
-      { "=p", "<Plug>(YankyPutAfterFilter)", desc = "Put After Applying a Filter" },
-      { "=P", "<Plug>(YankyPutBeforeFilter)", desc = "Put Before Applying a Filter" },
-    },
-  },
-  "tpope/vim-surround",
-  {
-    "j-hui/fidget.nvim",
-    opts = {
-      notification = {
-        window = {
-          winblend = 30, -- Background color opacity in the notification window
-          border = "single", -- Border around the notification window
-        },
-      },
-    },
-  },
+  { "tpope/vim-surround", event = { "BufReadPost", "BufNewFile" } },
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -205,7 +95,7 @@ return {
         function()
           require("which-key").show({ global = false })
         end,
-        desc = "Golang",
+        desc = "Go",
       },
     },
     opts = {

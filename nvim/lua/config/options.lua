@@ -1,4 +1,5 @@
 local opt = vim.opt
+
 opt.confirm = true
 opt.cursorline = true
 opt.hlsearch = true
@@ -8,51 +9,49 @@ opt.expandtab = true
 opt.number = true
 opt.relativenumber = true
 
-opt.autowrite = true -- сохраняет файл при переключении буферов
+opt.autowrite = true
 opt.autowriteall = true
-opt.autoread = true -- автоматически перечитывать файл, если изменен вне vim
+opt.autoread = true
 
-opt.showbreak = '↪' --  показывает символ ↪ в начале перенесенных строк
-opt.breakindent = true -- сохраняет отступ при переносе строки
-opt.copyindent = true -- копирует структуру отступов с предыдущей строки
+opt.showbreak = "↪"
+opt.breakindent = true
+opt.copyindent = true
 
 opt.tabstop = 2
 opt.softtabstop = 2
-opt.swapfile = false
 opt.shiftwidth = 2
-vim.opt.expandtab = true
 
-opt.completeopt = {'menu', 'menuone', 'noselect'}
-opt.fillchars = { eob = " " } -- Убрать символ ~ в конце буфера (визуальный мусор)
+opt.completeopt = { "menu", "menuone", "noselect" }
+opt.fillchars = { eob = " ", lastline = " ", fold = " " }
 
-opt.ignorecase = true -- Игнорировать регистр при поиске
-opt.smartcase = true -- Но учитывать, если в запросе есть заглавные буквы
+opt.ignorecase = true
+opt.smartcase = true
 
-opt.termguicolors = true -- Поддержка 24-bit цветов
-opt.mouse = "a" -- Включить мышь во всех режимах
-opt.wrap = false -- Автоматический перенос длинных строк
-opt.showmode = false -- Отключает отображение текущего режима (-- INSERT --) внизу, так как он уже есть в статус-линии
+opt.termguicolors = true
+opt.mouse = "a"
+opt.wrap = false
+opt.showmode = false
 
-opt.undofile = true -- Сохранять историю отмен между сессиями
-opt.swapfile = false -- Отключить swap-файлы (они раздражают)
-opt.fileencoding = "utf-8" -- Кодировка файлов
+opt.undofile = true
+opt.swapfile = false
+opt.fileencoding = "utf-8"
 
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-vim.opt.splitkeep = 'screen'
+opt.splitright = true
+opt.splitbelow = true
+opt.splitkeep = "screen"
 
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  vim.opt.clipboard = "unnamedplus"
 end)
 
-opt.timeoutlen = 300 -- Время ожидания комбинаций клавиш (мс)
+opt.timeoutlen = 300
 opt.updatetime = 250
 
 opt.signcolumn = "yes"
 
 vim.diagnostic.config({
   signs = true,
-  update_in_insert = true,
+  update_in_insert = false,
   underline = true,
   virtual_text = {
     spacing = 4,
@@ -64,19 +63,12 @@ vim.diagnostic.config({
 opt.list = true
 opt.listchars = {
   tab = ". ",
-  trail = '·',
-  nbsp = '␣',
+  trail = "·",
+  nbsp = "␣",
 }
 
-opt.fillchars = {
-  eob = ' ',
-  lastline = ' ',
-  fold = ' ',
-}
+opt.foldmethod = "indent"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
 
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.opt.foldlevel = 0
-vim.opt.foldlevelstart = 99
-vim.opt.foldtext = ''
 vim.o.winborder = "rounded"
