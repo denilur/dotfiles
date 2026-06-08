@@ -1,0 +1,118 @@
+# Ghostty — Material Design 3 dark, backend workstation
+# Reload: Cmd+Shift+,  |  Docs: https://ghostty.org/docs/config
+
+# ── Font ──────────────────────────────────────────────────────────────────────
+font-family = JetBrainsMono Nerd Font
+font-family-bold = JetBrainsMono Nerd Font
+font-family-italic = JetBrainsMono Nerd Font
+font-family-bold-italic = JetBrainsMono Nerd Font
+font-size = 15
+font-thicken = true
+font-thicken-strength = 20
+font-feature = calt
+font-feature = liga
+font-feature = ss01
+
+# ── Window ────────────────────────────────────────────────────────────────────
+window-theme = dark
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+window-padding-color = extend
+window-inherit-working-directory = true
+tab-inherit-working-directory = true
+split-inherit-working-directory = true
+window-inherit-font-size = true
+
+macos-titlebar-style = transparent
+macos-option-as-alt = true
+macos-window-shadow = true
+
+# ── Colors (Material 3 dark, synced with tmux) ──────────────────────────────
+background = #121212
+foreground = #e3e2e6
+
+cursor-style = block
+cursor-style-blink = true
+cursor-color = #90caf9
+cursor-text = #121212
+
+selection-background = #1565c0
+selection-foreground = #ffffff
+
+palette = 0=#212121
+palette = 1=#cf6679
+palette = 2=#81c784
+palette = 3=#ffb74d
+palette = 4=#64b5f6
+palette = 5=#ce93d8
+palette = 6=#4dd0e1
+palette = 7=#e0e0e0
+palette = 8=#757575
+palette = 9=#e57373
+palette = 10=#a5d6a7
+palette = 11=#ffd54f
+palette = 12=#90caf9
+palette = 13=#f48fb1
+palette = 14=#80deea
+palette = 15=#ffffff
+
+palette-generate = true
+minimum-contrast = 1.1
+
+# ── Splits & focus ────────────────────────────────────────────────────────────
+split-divider-color = #49454f
+unfocused-split-opacity = 0.90
+unfocused-split-fill = #121212
+
+# ── Scrollback & mouse ────────────────────────────────────────────────────────
+scrollback-limit = 104857600
+scrollbar = system
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = precision:0.8,discrete:3
+copy-on-select = clipboard
+right-click-action = copy-or-paste
+link-previews = true
+
+# ── Performance & rendering ───────────────────────────────────────────────────
+grapheme-width-method = unicode
+resize-overlay = always
+resize-overlay-duration = 150ms
+resize-overlay-position = center
+
+# ── Shell integration ─────────────────────────────────────────────────────────
+shell-integration = zsh
+shell-integration-features = cursor,title,sudo,ssh-env,ssh-terminfo,path
+
+# ── Keybindings (macOS) ───────────────────────────────────────────────────────
+keybind = super+shift+enter=new_window
+keybind = super+enter=new_tab
+
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+
+keybind = super+bracket_left=previous_tab
+keybind = super+bracket_right=next_tab
+
+keybind = super+equal=increase_font_size:1
+keybind = super+plus=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+zero=reset_font_size
+
+keybind = super+shift+comma=reload_config
+keybind = super+k=clear_screen
+keybind = super+f=toggle_fullscreen
+
+keybind = super+shift+w=close_surface
+keybind = super+w=close_tab:this
+
+# Quick terminal (dropdown)
+keybind = global:super+grave_accent=toggle_quick_terminal
+
+# ── Command palette shortcuts ───────────────────────────────────────────────
+command-palette-entry = title:New Tab, action:new_tab, description:Open a new tab in the current window
+command-palette-entry = title:Split Right, action:new_split:right, description:Split pane to the right
+command-palette-entry = title:Split Down, action:new_split:down, description:Split pane downward
+
+# ── Optional local overrides ────────────────────────────────────────────────
+config-file = ?local.conf
