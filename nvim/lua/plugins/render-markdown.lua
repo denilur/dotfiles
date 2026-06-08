@@ -1,8 +1,8 @@
 return {
-  'MeanderingProgrammer/render-markdown.nvim',
-  ft = { 'markdown' },
+  "MeanderingProgrammer/render-markdown.nvim",
+  ft = { "markdown" },
   opts = {
-    file_types = { 'markdown' },
+    file_types = { "markdown" },
     heading = {
       sign = false,
     },

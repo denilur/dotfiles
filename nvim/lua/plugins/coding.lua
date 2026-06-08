@@ -76,31 +76,4 @@ return {
       })
     end,
   },
-  { "tpope/vim-dadbod", ft = { "sql", "mysql", "plsql", "postgres" } },
-  {
-    "kristijanhusak/vim-dadbod-ui",
-    lazy = true,
-    cmd = { "DB", "DBUI" },
-    ft = { "sql", "mysql", "plsql", "postgres" },
-    config = function()
-      vim.g.db_ui_save_location = vim.fn.getcwd() .. "/sql/"
-    end,
-    dependencies = {
-      "tpope/vim-dadbod",
-      "kristijanhusak/vim-dadbod-completion",
-    },
-  },
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    lazy = true,
-    ft = { "sql", "mysql", "plsql", "postgres" },
-    config = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "sql", "mysql", "plsql", "postgres" },
-        callback = function()
-          vim.bo.omnifunc = "vim_dadbod_completion#omni"
-        end,
-      })
-    end,
-  },
 }

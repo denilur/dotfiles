@@ -13,14 +13,26 @@ M.servers_by_ft = {
 local enabled = {}
 
 function M.capabilities()
+  local caps
   local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
   if ok then
-    return cmp_lsp.default_capabilities()
+    caps = cmp_lsp.default_capabilities()
+  else
+    caps = vim.lsp.protocol.make_client_capabilities()
   end
-  return vim.lsp.protocol.make_client_capabilities()
+  caps.semanticTokensProvider = nil
+  return caps
 end
 
-function M.on_attach(_client, bufnr)
+function M.on_attach(client, bufnr)
+  if client.name == "gopls" then
+    client.server_capabilities.semanticTokensProvider = nil
+    vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
+    if vim.lsp.inlay_hint then
+      vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+    end
+  end
+
   local opts = { buffer = bufnr, silent = true }
 
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)

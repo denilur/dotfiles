@@ -1,6 +1,3 @@
-local dotfiles = vim.fn.resolve(vim.fn.stdpath("config") .. "/..")
-local lazygit_config = dotfiles .. "/lazygit/config.yml"
-
 return {
   {
     "lewis6991/gitsigns.nvim",
@@ -70,8 +67,6 @@ return {
       { "<leader>gf", "<cmd>LazyGitFilter<cr>", desc = "LazyGit filter" },
     },
     init = function()
-      vim.g.lazygit_use_custom_config_file_path = 1
-      vim.g.lazygit_config_file_path = lazygit_config
       vim.g.lazygit_floating_window_scaling_factor = 0.9
       vim.g.lazygit_use_neovim_remote = 1
     end,

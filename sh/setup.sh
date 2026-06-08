@@ -49,6 +49,7 @@ setup_links_to_config_files() {
     # Main config links
     symlink "$DOTFILES_DIR/nvim" "$config_dir/nvim"
     symlink "$DOTFILES_DIR/alacritty" "$config_dir/alacritty"
+    symlink "$DOTFILES_DIR/lazygit" "$config_dir/lazygit"
 
     # Home directory links
     symlink "$DOTFILES_DIR/.golangci.yml" "$HOME_DIR/.golangci.yml"

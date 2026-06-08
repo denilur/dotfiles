@@ -3,13 +3,13 @@ return {
   settings = {
     gopls = {
       hints = {
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        constantValues = true,
-        functionTypeParameters = true,
-        parameterNames = true,
-        rangeVariableTypes = true,
+        assignVariableTypes = false,
+        compositeLiteralFields = false,
+        compositeLiteralTypes = false,
+        constantValues = false,
+        functionTypeParameters = false,
+        parameterNames = false,
+        rangeVariableTypes = false,
       },
       analyses = {
         nilness = true,
@@ -31,9 +31,9 @@ return {
       semanticTokens = false,
       diagnosticsDelay = "250ms",
       annotations = {
-        bounds = true,
-        escape = true,
-        inline = true,
+        bounds = false,
+        escape = false,
+        inline = false,
       },
     },
   },

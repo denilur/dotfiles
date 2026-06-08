@@ -1,0 +1,6 @@
+# Black caret in commit message editor (gocui uses activeBorderColor as SelFgColor).
+gui:
+  theme:
+    activeBorderColor:
+      - "#000000"
+      - bold

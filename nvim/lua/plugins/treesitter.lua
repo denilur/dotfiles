@@ -4,7 +4,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    event = { "BufReadPost", "BufNewFile" },
+    lazy = false,
     build = ":TSUpdate",
     cmd = { "TSUpdate", "TSInstall", "TSUninstall", "TSLog" },
     config = function()
@@ -14,12 +14,13 @@ return {
 
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
-        callback = function()
-          local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+        callback = function(ev)
+          local ft = vim.bo[ev.buf].filetype
+          local lang = vim.treesitter.language.get_lang(ft)
           if not lang or not vim.treesitter.language.add(lang) then
             return
           end
-          pcall(vim.treesitter.start)
+          pcall(vim.treesitter.start, ev.buf)
         end,
       })
     end,
