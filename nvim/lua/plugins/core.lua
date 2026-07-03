@@ -91,6 +91,13 @@ return {
         desc = "Code",
       },
       {
+        "<leader>r",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "gRPC",
+      },
+      {
         "<localleader>g",
         function()
           require("which-key").show({ global = false })

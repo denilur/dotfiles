@@ -1,0 +1,33 @@
+# Material Design 3 light — synced with tmux
+background = #fefbff
+foreground = #1c1b1f
+
+cursor-color = #1565c0
+cursor-text = #ffffff
+
+selection-background = #bbdefb
+selection-foreground = #1c1b1f
+
+palette = 0=#1c1b1f
+palette = 1=#ba1a1a
+palette = 2=#2e7d32
+palette = 3=#e65100
+palette = 4=#1565c0
+palette = 5=#7b1fa2
+palette = 6=#00838f
+palette = 7=#49454f
+palette = 8=#79747e
+palette = 9=#d32f2f
+palette = 10=#388e3c
+palette = 11=#f57c00
+palette = 12=#1976d2
+palette = 13=#8e24aa
+palette = 14=#0097a7
+palette = 15=#212121
+
+palette-generate = true
+palette-harmonious = true
+minimum-contrast = 1.1
+
+split-divider-color = #cac4d0
+unfocused-split-fill = #fefbff

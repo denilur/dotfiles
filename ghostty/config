@@ -1,5 +1,10 @@
-# Ghostty — Material Design 3 dark, backend workstation
+# Ghostty — Material Design 3, backend workstation
 # Reload: Cmd+Shift+,  |  Docs: https://ghostty.org/docs/config
+
+# ── Theme (follows macOS Appearance) ──────────────────────────────────────────
+theme = dark:Catppuccin Frappe,light:Catppuccin Latte
+
+window-theme = auto
 
 # ── Font ──────────────────────────────────────────────────────────────────────
 font-family = JetBrainsMono Nerd Font
@@ -14,7 +19,6 @@ font-feature = liga
 font-feature = ss01
 
 # ── Window ────────────────────────────────────────────────────────────────────
-window-theme = dark
 window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = true
@@ -24,46 +28,16 @@ tab-inherit-working-directory = true
 split-inherit-working-directory = true
 window-inherit-font-size = true
 
-macos-titlebar-style = transparent
+# native: required for reliable light/dark switching (transparent breaks it on 1.3.x)
+macos-titlebar-style = native
 macos-option-as-alt = true
 macos-window-shadow = true
 
-# ── Colors (Material 3 dark, synced with tmux) ──────────────────────────────
-background = #121212
-foreground = #e3e2e6
-
 cursor-style = block
 cursor-style-blink = true
-cursor-color = #90caf9
-cursor-text = #121212
-
-selection-background = #1565c0
-selection-foreground = #ffffff
-
-palette = 0=#212121
-palette = 1=#cf6679
-palette = 2=#81c784
-palette = 3=#ffb74d
-palette = 4=#64b5f6
-palette = 5=#ce93d8
-palette = 6=#4dd0e1
-palette = 7=#e0e0e0
-palette = 8=#757575
-palette = 9=#e57373
-palette = 10=#a5d6a7
-palette = 11=#ffd54f
-palette = 12=#90caf9
-palette = 13=#f48fb1
-palette = 14=#80deea
-palette = 15=#ffffff
-
-palette-generate = true
-minimum-contrast = 1.1
 
 # ── Splits & focus ────────────────────────────────────────────────────────────
-split-divider-color = #49454f
 unfocused-split-opacity = 0.90
-unfocused-split-fill = #121212
 
 # ── Scrollback & mouse ────────────────────────────────────────────────────────
 scrollback-limit = 104857600

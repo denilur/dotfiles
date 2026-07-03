@@ -1,0 +1,58 @@
+[window]
+opacity = 0.99
+option_as_alt = "Both"
+
+[cursor]
+style = { shape = "Block", blinking = "On" }
+
+[colors.cursor]
+cursor = "#000000"
+text = "#ffffff"
+
+[font]
+size = 18
+
+[font.bold]
+style = "Bold"
+family = "JetBrainsMono Nerd Font"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+[font.italic]
+style = "Italic"
+
+[font.normal]
+style = "Regular"
+family = "JetBrainsMono Nerd Font"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "Return"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "0"
+mods = "Control"
