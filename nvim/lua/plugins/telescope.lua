@@ -1,9 +1,8 @@
+local ROOT_MARKERS = { "go.work", "go.mod", "Makefile", ".git" }
+
 local function project_root()
-  local ok, util = pcall(require, "lspconfig.util")
-  if ok then
-    return util.root_pattern(".git")(vim.fn.expand("%:p")) or vim.loop.cwd()
-  end
-  return vim.loop.cwd()
+  local filename = vim.api.nvim_buf_get_name(0)
+  return vim.fs.root(filename, ROOT_MARKERS) or vim.loop.cwd()
 end
 
 return {
@@ -13,6 +12,14 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons",
+    {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+      cond = function()
+        return vim.fn.executable("make") == 1
+      end,
+    },
+    "nvim-telescope/telescope-ui-select.nvim",
   },
   keys = {
     {
@@ -63,8 +70,9 @@ return {
   },
   config = function()
     local actions = require("telescope.actions")
+    local telescope = require("telescope")
 
-    require("telescope").setup({
+    telescope.setup({
       defaults = {
         sorting_strategy = "ascending",
         layout_strategy = "vertical",
@@ -97,6 +105,16 @@ return {
           additional_args = { "--hidden", "--glob=!.git" },
         },
       },
+      extensions = {
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown({
+            layout_config = { width = 0.8, height = 0.5 },
+          }),
+        },
+      },
     })
+
+    pcall(telescope.load_extension, "fzf")
+    pcall(telescope.load_extension, "ui-select")
   end,
 }

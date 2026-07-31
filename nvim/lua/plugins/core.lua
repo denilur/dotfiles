@@ -98,6 +98,27 @@ return {
         desc = "gRPC",
       },
       {
+        "<leader>t",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Tests",
+      },
+      {
+        "<leader>q",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Quickfix",
+      },
+      {
+        "<leader>x",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Trouble",
+      },
+      {
         "<localleader>g",
         function()
           require("which-key").show({ global = false })

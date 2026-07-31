@@ -20,7 +20,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     cmd = "Mason",
     opts = {
-      ensure_installed = { "gopls", "buf_ls", "lua_ls", "jsonls" },
+      ensure_installed = { "gopls", "buf_ls", "lua_ls", "jsonls", "sqls" },
       automatic_installation = true,
     },
   },

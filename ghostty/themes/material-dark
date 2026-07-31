@@ -1,32 +1,32 @@
-# Material Design 3 dark — synced with tmux
-background = #121212
-foreground = #e3e2e6
+# Kanagawa Wave dark — synced with tmux
+background = #1f1f28
+foreground = #dcd7ba
 
-cursor-color = #90caf9
-cursor-text = #121212
+cursor-color = #c8c093
+cursor-text = #1f1f28
 
-selection-background = #1565c0
-selection-foreground = #ffffff
+selection-background = #2d4f67
+selection-foreground = #dcd7ba
 
-palette = 0=#212121
-palette = 1=#cf6679
-palette = 2=#81c784
-palette = 3=#ffb74d
-palette = 4=#64b5f6
-palette = 5=#ce93d8
-palette = 6=#4dd0e1
-palette = 7=#e0e0e0
-palette = 8=#757575
-palette = 9=#e57373
-palette = 10=#a5d6a7
-palette = 11=#ffd54f
-palette = 12=#90caf9
-palette = 13=#f48fb1
-palette = 14=#80deea
-palette = 15=#ffffff
+palette = 0=#16161d
+palette = 1=#c34043
+palette = 2=#76946a
+palette = 3=#c0a36e
+palette = 4=#7e9cd8
+palette = 5=#957fb8
+palette = 6=#6a9589
+palette = 7=#c8c093
+palette = 8=#727169
+palette = 9=#e82424
+palette = 10=#98bb6c
+palette = 11=#e6c384
+palette = 12=#7fb4ca
+palette = 13=#938aa9
+palette = 14=#7aa89f
+palette = 15=#dcd7ba
 
 palette-generate = true
 minimum-contrast = 1.1
 
-split-divider-color = #49454f
-unfocused-split-fill = #121212
+split-divider-color = #54546d
+unfocused-split-fill = #1f1f28
