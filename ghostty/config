@@ -1,8 +1,8 @@
-# Ghostty — Material Design 3, backend workstation
+# Ghostty — Kanagawa, synced with Neovim (wave / lotus)
 # Reload: Cmd+Shift+,  |  Docs: https://ghostty.org/docs/config
 
 # ── Theme (follows macOS Appearance) ──────────────────────────────────────────
-theme = dark:Catppuccin Frappe,light:Catppuccin Latte
+theme = dark:Kanagawa Wave,light:Kanagawa Lotus
 
 window-theme = auto
 

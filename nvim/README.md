@@ -1,4 +1,16 @@
-# 💤 LazyVim
+# Neovim config
 
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+Minimal Go-focused setup for terminal work alongside Cursor / GigaCode.
+
+## Stack
+
+- lazy.nvim
+- gopls (+ lua_ls, jsonls, sqls, buf via Mason / PATH)
+- Telescope, treesitter, gitsigns, yazi
+- surround, tmux-navigator, kanagawa
+- grpc-nvim
+
+## Theme
+
+Follows macOS Appearance (Kanagawa wave / lotus) via `auto-dark-mode.nvim`.
+Override: `NVIM_BACKGROUND=dark|light`.

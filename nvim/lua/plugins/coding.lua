@@ -31,17 +31,38 @@ return {
   },
   {
     "williamboman/mason.nvim",
+    lazy = false,
     cmd = "Mason",
     build = ":MasonUpdate",
-    opts = {
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
+    dependencies = { "WhoIsSethDaniel/mason-tool-installer.nvim" },
+    config = function()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
         },
-      },
-    },
+      })
+
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "buf",
+          "goimports",
+          "golangci-lint",
+          "gofumpt",
+          "gopls",
+          "gotestsum",
+          "json-lsp",
+          "jsonlint",
+          "lua-language-server",
+          "sqlfluff",
+          "sqls",
+          "stylua",
+        },
+      })
+    end,
   },
   {
     "hrsh7th/nvim-cmp",
@@ -54,7 +75,14 @@ return {
     },
     config = function()
       local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
       cmp.setup({
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -62,11 +90,29 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<C-j>"] = cmp.mapping.select_next_item({
-            behavior = cmp.ConfirmBehavior.Insert,
+            behavior = cmp.SelectBehavior.Insert,
           }),
           ["<C-k>"] = cmp.mapping.select_prev_item({
-            behavior = cmp.ConfirmBehavior.Insert,
+            behavior = cmp.SelectBehavior.Insert,
           }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
@@ -77,3 +123,4 @@ return {
     end,
   },
 }
+

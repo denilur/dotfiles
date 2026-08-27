@@ -19,10 +19,12 @@ function M.capabilities()
     caps = cmp_lsp.default_capabilities()
   else
     caps = vim.lsp.protocol.make_client_capabilities()
+    caps.textDocument.completion.completionItem.snippetSupport = true
   end
   caps.semanticTokensProvider = nil
   return caps
 end
+
 
 function M.on_attach(client, bufnr)
   if client.name == "gopls" then
@@ -36,8 +38,29 @@ function M.on_attach(client, bufnr)
   local opts = { buffer = bufnr, silent = true }
 
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
+  vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Signature help" }))
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
+  vim.keymap.set(
+    "n",
+    "grD",
+    vim.lsp.buf.declaration,
+    vim.tbl_extend("force", opts, { desc = "Goto declaration" })
+  )
+
+  if client:supports_method("textDocument/typeHierarchy") then
+    vim.keymap.set("n", "grs", function()
+      vim.lsp.buf.typehierarchy("subtypes")
+    end, vim.tbl_extend("force", opts, { desc = "Goto subtypes" }))
+    vim.keymap.set("n", "grS", function()
+      vim.lsp.buf.typehierarchy("supertypes")
+    end, vim.tbl_extend("force", opts, { desc = "Goto supertypes" }))
+  end
+
+  if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+    vim.keymap.set("n", "<leader>uh", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+    end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+  end
 end
 
 function M.enable_for_filetype(ft)
@@ -58,9 +81,13 @@ function M.setup_servers()
   vim.lsp.config("buf_ls", {
     cmd = { "buf", "beta", "lsp", "--timeout", "0s" },
     filetypes = { "proto" },
+    root_markers = { "buf.yaml", "buf.yml", ".git" },
   })
 
   vim.lsp.config("sqls", {
+    cmd = { "sqls" },
+    filetypes = { "sql", "mysql" },
+    root_markers = { ".git" },
     settings = {
       sqls = {
         connections = {},
@@ -69,6 +96,15 @@ function M.setup_servers()
   })
 
   vim.lsp.config("lua_ls", {
+    cmd = { "lua-language-server" },
+    filetypes = { "lua" },
+    root_markers = {
+      ".luarc.json",
+      ".luarc.jsonc",
+      ".stylua.toml",
+      "stylua.toml",
+      ".git",
+    },
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
@@ -79,9 +115,13 @@ function M.setup_servers()
     },
   })
 
-  vim.lsp.config("jsonls", {})
+  vim.lsp.config("jsonls", {
+    cmd = { "vscode-json-language-server", "--stdio" },
+    filetypes = { "json", "jsonc" },
+    root_markers = { ".git" },
+    init_options = { provideFormatter = true },
+  })
 
-  -- Go backend: always on for go/gomod/gowork (via lsp/gopls.lua)
   vim.lsp.enable("gopls")
 
   local group = vim.api.nvim_create_augroup("dotfiles_lsp_ft", { clear = true })
@@ -93,7 +133,6 @@ function M.setup_servers()
     end,
   })
 
-  -- Already-open buffer when LSP config loads
   if vim.bo.filetype ~= "" then
     M.enable_for_filetype(vim.bo.filetype)
   end

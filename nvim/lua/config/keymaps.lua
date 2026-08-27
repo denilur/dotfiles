@@ -1,6 +1,3 @@
-local MAKE_TERMINAL_DIRECTION = "horizontal"
-local MAKE_TERMINAL_CLOSE_ON_EXIT = false
-local MAKE_TERMINAL_ID = 80
 local MAKE_TERMINAL_HEIGHT = 15
 
 local function map(mode, lhs, rhs, desc_or_opts)
@@ -20,19 +17,52 @@ local function project_root()
 end
 
 local function run_make(target)
-  local Terminal = require("toggleterm.terminal").Terminal
   local command = target == "" and "make" or "make " .. target
-  local terminal = Terminal:new({
-    id = MAKE_TERMINAL_ID,
+  require("config.terminal").run({
     cmd = command,
-    dir = project_root(),
-    direction = MAKE_TERMINAL_DIRECTION,
-    close_on_exit = MAKE_TERMINAL_CLOSE_ON_EXIT,
-    hidden = true,
-    size = MAKE_TERMINAL_HEIGHT,
+    cwd = project_root(),
+    slot = "make",
+    height = MAKE_TERMINAL_HEIGHT,
   })
+end
 
-  terminal:toggle()
+local function copy_path(opts)
+  opts = opts or {}
+
+  local filename = vim.api.nvim_buf_get_name(0)
+  if filename == "" then
+    vim.notify("No file name", vim.log.levels.WARN)
+    return
+  end
+
+  local path = filename
+  if not opts.absolute then
+    local git_root = vim.fs.root(filename, { ".git" })
+    if git_root then
+      path = vim.fs.relpath(git_root, filename) or filename
+    end
+  end
+
+  local text = path
+  if opts.visual then
+    local start_line = vim.fn.line("'<")
+    local end_line = vim.fn.line("'>")
+    if start_line > end_line then
+      start_line, end_line = end_line, start_line
+    end
+    if start_line == end_line then
+      text = string.format("%s:%d", path, start_line)
+    else
+      text = string.format("%s:%d-%d", path, start_line, end_line)
+    end
+  else
+    local line = vim.api.nvim_win_get_cursor(0)[1]
+    text = string.format("%s:%d", path, line)
+  end
+
+  vim.fn.setreg("+", text)
+  vim.fn.setreg('"', text)
+  vim.notify("Copied: " .. text)
 end
 
 vim.g.mapleader = " "
@@ -43,11 +73,37 @@ vim.keymap.set("i", "jk", "<esc>")
 vim.keymap.set({ "n", "x" }, "<leader>a", vim.lsp.buf.code_action, { desc = "Code action" })
 
 vim.keymap.set({ "n", "i", "t" }, "<C-t>", function()
-  require("toggleterm").toggle()
+  require("config.terminal").toggle_float()
 end, { desc = "Toggle terminal" })
 
-vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+
+vim.keymap.set("n", "<leader>cf", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "Format buffer" })
+
+vim.api.nvim_create_user_command("CopyGitPath", function()
+  copy_path({})
+end, {
+  desc = "Copy path from git root with current line",
+})
+
+map("n", "<leader>yp", function()
+  copy_path({})
+end, "Copy git path:line")
+map("n", "<leader>yP", function()
+  copy_path({ absolute = true })
+end, "Copy absolute path:line")
+map("x", "<leader>yp", function()
+  copy_path({ visual = true })
+end, "Copy git path:line-range")
+map("x", "<leader>yP", function()
+  copy_path({ absolute = true, visual = true })
+end, "Copy absolute path:line-range")
+
+map("n", "<leader>gg", function()
+  require("config.terminal").float_cmd("lazygit", project_root())
+end, "LazyGit")
 
 map("n", "<Esc>", ":noh<CR>", "Clear highlight")
 
@@ -56,11 +112,14 @@ map("n", "[b", ":bprevious<CR>", "Previous buffer")
 
 map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
 map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-map("n", "<leader>dq", vim.diagnostic.setqflist, "Diagnostics to quickfix")
+map("n", "<leader>dq", function()
+  vim.diagnostic.setqflist({ open = true })
+end, "Diagnostics to quickfix")
 map("n", "]q", ":cnext<CR>", "Next quickfix item")
 map("n", "[q", ":cprevious<CR>", "Previous quickfix item")
 map("n", "<leader>qo", ":copen<CR>", "Open quickfix")
 map("n", "<leader>qc", ":cclose<CR>", "Close quickfix")
+
 map("t", "<Esc><Esc>", [[<C-\\><C-n>]], "Terminal normal mode")
 map("t", "jk", [[<C-\\><C-n>]], "Terminal normal mode")
 

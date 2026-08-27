@@ -1,4 +1,5 @@
 --- Kanagawa theme tuned for backend work (Go, SQL, Proto, YAML, JSON, Lua).
+--- Follows macOS Appearance via auto-dark-mode; override with NVIM_BACKGROUND=dark|light
 
 local DARK_THEME = "kanagawa-wave"
 local LIGHT_THEME = "kanagawa-lotus"

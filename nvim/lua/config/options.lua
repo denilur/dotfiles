@@ -1,3 +1,8 @@
+local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+if vim.uv.fs_stat(mason_bin) then
+  vim.env.PATH = mason_bin .. ":" .. vim.env.PATH
+end
+
 local opt = vim.opt
 
 opt.confirm = true
@@ -30,7 +35,7 @@ opt.smartcase = true
 opt.termguicolors = true
 opt.mouse = "a"
 opt.wrap = false
-opt.showmode = false
+opt.showmode = true
 
 opt.undofile = true
 opt.swapfile = false

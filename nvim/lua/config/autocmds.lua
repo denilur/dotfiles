@@ -2,8 +2,6 @@ local GO_FORMAT_TIMEOUT_MS = 5000
 local TERMINAL_HEIGHT = 15
 local GO_ROOT_MARKERS = { "go.work", "go.mod", ".git" }
 local GOTESTSUM_WATCH_FORMAT = "testname"
-local GOTESTSUM_WATCH_TERMINAL_ID = 81
-local GOTESTSUM_WATCH_TERMINAL_DIRECTION = "horizontal"
 local SQL_FORMAT_COMMAND = "sqlfluff"
 
 local function shellescape(value)
@@ -58,27 +56,21 @@ local function open_go_alternate(bufnr, command)
 end
 
 local function run_in_terminal(command, bufnr)
-  local root = current_root(bufnr or 0)
-  vim.cmd("botright split")
-  vim.cmd("resize " .. TERMINAL_HEIGHT)
-  vim.cmd("terminal cd " .. shellescape(root) .. " && " .. command)
+  require("config.terminal").run({
+    cmd = command,
+    cwd = current_root(bufnr or 0),
+    slot = "go-test",
+    height = TERMINAL_HEIGHT,
+  })
 end
 
 local function run_gotestsum_watch(package, bufnr)
-  local Terminal = require("toggleterm.terminal").Terminal
-  local root = current_root(bufnr or 0)
-  local command = "gotestsum --watch --format " .. GOTESTSUM_WATCH_FORMAT .. " " .. package
-  local terminal = Terminal:new({
-    id = GOTESTSUM_WATCH_TERMINAL_ID,
-    cmd = command,
-    dir = root,
-    direction = GOTESTSUM_WATCH_TERMINAL_DIRECTION,
-    close_on_exit = false,
-    hidden = true,
-    size = TERMINAL_HEIGHT,
+  require("config.terminal").run({
+    cmd = "gotestsum --watch --format " .. GOTESTSUM_WATCH_FORMAT .. " " .. package,
+    cwd = current_root(bufnr or 0),
+    slot = "gotestsum-watch",
+    height = TERMINAL_HEIGHT,
   })
-
-  terminal:toggle()
 end
 
 local function gopls_clients(bufnr)
@@ -149,6 +141,57 @@ local function toggle_diagnostics()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end
 
+local function code_action_by_kind(kind, apply)
+  vim.lsp.buf.code_action({
+    apply = apply,
+    filter = function(action)
+      return action.kind == kind
+    end,
+  })
+end
+
+local function golangci_lint_quickfix(bufnr, args)
+  local root = current_root(bufnr)
+  args = args or { "run", "--output.json.path", "stdout" }
+
+  vim.system(vim.list_extend({ "golangci-lint" }, args), { cwd = root, text = true }, function(result)
+    vim.schedule(function()
+      local unknown_flag = result.code ~= 0 and (result.stderr or ""):match("unknown flag")
+      if unknown_flag and args[2] ~= "--out-format" then
+        golangci_lint_quickfix(bufnr, { "run", "--out-format", "json" })
+        return
+      end
+
+      local ok, decoded = pcall(vim.json.decode, result.stdout or "")
+      if not ok or not decoded then
+        vim.notify("golangci-lint: failed to parse output\n" .. (result.stderr or ""), vim.log.levels.ERROR)
+        return
+      end
+
+      local items = {}
+      for _, issue in ipairs(decoded.Issues or {}) do
+        local filename = issue.Pos.Filename
+        if not vim.startswith(filename, "/") then
+          filename = vim.fs.joinpath(root, filename)
+        end
+        table.insert(items, {
+          filename = filename,
+          lnum = issue.Pos.Line,
+          col = issue.Pos.Column,
+          text = string.format("[%s] %s", issue.FromLinter, issue.Text),
+        })
+      end
+
+      vim.fn.setqflist({}, " ", { title = "golangci-lint", items = items })
+      if #items > 0 then
+        vim.cmd("copen")
+      else
+        vim.notify("golangci-lint: no issues", vim.log.levels.INFO)
+      end
+    end)
+  end)
+end
+
 vim.keymap.set("n", "<leader>ud", toggle_diagnostics, { desc = "Toggle diagnostics" })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -187,16 +230,57 @@ vim.api.nvim_create_autocmd("FileType", {
 
     vim.keymap.set("n", "<localleader>gt", test_package, vim.tbl_extend("force", opts, { desc = "Go test package" }))
     vim.keymap.set("n", "<localleader>gT", test_all, vim.tbl_extend("force", opts, { desc = "Go test all packages" }))
-    vim.keymap.set("n", "<localleader>gw", watch_package, vim.tbl_extend("force", opts, { desc = "Watch package tests" }))
+    vim.keymap.set(
+      "n",
+      "<localleader>gw",
+      watch_package,
+      vim.tbl_extend("force", opts, { desc = "Watch package tests" })
+    )
     vim.keymap.set("n", "<localleader>gW", watch_all, vim.tbl_extend("force", opts, { desc = "Watch all tests" }))
-
-    vim.keymap.set("n", "<leader>tp", test_package, vim.tbl_extend("force", opts, { desc = "Go test package" }))
-    vim.keymap.set("n", "<leader>ta", test_all, vim.tbl_extend("force", opts, { desc = "Go test all packages" }))
-    vim.keymap.set("n", "<leader>tw", watch_package, vim.tbl_extend("force", opts, { desc = "Watch package tests" }))
-    vim.keymap.set("n", "<leader>tW", watch_all, vim.tbl_extend("force", opts, { desc = "Watch all tests" }))
 
     vim.keymap.set("n", "<localleader>gl", function()
       run_in_terminal("golangci-lint run", buf)
     end, vim.tbl_extend("force", opts, { desc = "Run golangci-lint" }))
+
+    vim.keymap.set("n", "<localleader>gq", function()
+      golangci_lint_quickfix(buf)
+    end, vim.tbl_extend("force", opts, { desc = "golangci-lint to quickfix" }))
+
+    vim.keymap.set("n", "<localleader>jl", function()
+      code_action_by_kind("refactor.rewrite.joinLines", true)
+    end, vim.tbl_extend("force", opts, { desc = "Join lines" }))
+    vim.keymap.set("n", "<localleader>sl", function()
+      code_action_by_kind("refactor.rewrite.splitLines", true)
+    end, vim.tbl_extend("force", opts, { desc = "Split lines" }))
+
+    vim.keymap.set({ "n" }, "<localleader>at", function()
+      code_action_by_kind("source.addTest", true)
+    end, vim.tbl_extend("force", opts, { desc = "Add test" }))
+
+    vim.keymap.set("n", "<localleader>fs", function()
+      code_action_by_kind("refactor.rewrite.fillStruct", false)
+    end, vim.tbl_extend("force", opts, { desc = "Fill struct (choose)" }))
+    vim.keymap.set("n", "<localleader>fS", function()
+      code_action_by_kind("refactor.rewrite.fillStruct", true)
+    end, vim.tbl_extend("force", opts, { desc = "Fill struct" }))
+
+    vim.keymap.set({ "v", "s" }, "<localleader>em", function()
+      code_action_by_kind("refactor.extract.method", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract method" }))
+    vim.keymap.set({ "v", "s" }, "<localleader>ef", function()
+      code_action_by_kind("refactor.extract.function", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract function" }))
+    vim.keymap.set({ "v", "s" }, "<localleader>ec", function()
+      code_action_by_kind("refactor.extract.constant", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract constant" }))
+    vim.keymap.set({ "v", "s" }, "<localleader>eC", function()
+      code_action_by_kind("refactor.extract.constant-all", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract constant (all occurrences)" }))
+    vim.keymap.set({ "v", "s" }, "<localleader>ev", function()
+      code_action_by_kind("refactor.extract.variable", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract variable" }))
+    vim.keymap.set({ "v", "s" }, "<localleader>eV", function()
+      code_action_by_kind("refactor.extract.variable-all", true)
+    end, vim.tbl_extend("force", opts, { desc = "Extract variable (all occurrences)" }))
   end,
 })

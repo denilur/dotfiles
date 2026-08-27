@@ -5,6 +5,23 @@ local function project_root()
   return vim.fs.root(filename, ROOT_MARKERS) or vim.loop.cwd()
 end
 
+local function lsp_references()
+  require("telescope.builtin").lsp_references({
+    entry_maker = function(entry)
+      local git_root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]
+      return {
+        value = entry,
+        ordinal = entry.filename,
+        display = git_root ~= "" and entry.filename:sub(#git_root + 2) or entry.filename,
+        filename = entry.filename,
+        lnum = entry.lnum,
+        col = entry.col,
+      }
+    end,
+    path_display = { "relative" },
+  })
+end
+
 return {
   "nvim-telescope/telescope.nvim",
   lazy = true,
@@ -19,7 +36,6 @@ return {
         return vim.fn.executable("make") == 1
       end,
     },
-    "nvim-telescope/telescope-ui-select.nvim",
   },
   keys = {
     {
@@ -27,7 +43,7 @@ return {
       function()
         require("telescope.builtin").live_grep({ cwd = project_root() })
       end,
-      desc = "Live grep (project root)",
+      desc = "Live grep",
     },
     {
       "<leader>ff",
@@ -36,36 +52,11 @@ return {
       end,
       desc = "Find files",
     },
-    {
-      "<leader>fg",
-      function()
-        require("telescope.builtin").live_grep({ cwd = project_root() })
-      end,
-      desc = "Live grep",
-    },
     { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
     { "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "Goto definition" },
     { "gi", "<cmd>Telescope lsp_implementations<cr>", desc = "Goto implementation" },
-    {
-      "gr",
-      function()
-        require("telescope.builtin").lsp_references({
-          entry_maker = function(entry)
-            local git_root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]
-            return {
-              value = entry,
-              ordinal = entry.filename,
-              display = git_root ~= "" and entry.filename:sub(#git_root + 2) or entry.filename,
-              filename = entry.filename,
-              lnum = entry.lnum,
-              col = entry.col,
-            }
-          end,
-          path_display = { "relative" },
-        })
-      end,
-      desc = "LSP references",
-    },
+    { "gr", lsp_references, desc = "LSP references" },
+    { "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
     { "<leader>dd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
   },
   config = function()
@@ -105,16 +96,8 @@ return {
           additional_args = { "--hidden", "--glob=!.git" },
         },
       },
-      extensions = {
-        ["ui-select"] = {
-          require("telescope.themes").get_dropdown({
-            layout_config = { width = 0.8, height = 0.5 },
-          }),
-        },
-      },
     })
 
     pcall(telescope.load_extension, "fzf")
-    pcall(telescope.load_extension, "ui-select")
   end,
 }
