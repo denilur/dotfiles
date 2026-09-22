@@ -70,8 +70,6 @@ vim.g.maplocalleader = ","
 
 vim.keymap.set("i", "jk", "<esc>")
 
-vim.keymap.set({ "n", "x" }, "<leader>a", vim.lsp.buf.code_action, { desc = "Code action" })
-
 vim.keymap.set({ "n", "i", "t" }, "<C-t>", function()
   require("config.terminal").toggle_float()
 end, { desc = "Toggle terminal" })

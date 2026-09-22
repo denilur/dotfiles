@@ -15,7 +15,6 @@ opt.number = true
 opt.relativenumber = true
 
 opt.autowrite = true
-opt.autowriteall = true
 opt.autoread = true
 
 opt.showbreak = "↪"

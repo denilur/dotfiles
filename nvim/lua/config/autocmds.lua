@@ -1,7 +1,7 @@
 local GO_FORMAT_TIMEOUT_MS = 5000
+local GOIMPORTS_COMMAND = "goimports"
 local TERMINAL_HEIGHT = 15
 local GO_ROOT_MARKERS = { "go.work", "go.mod", ".git" }
-local GOTESTSUM_WATCH_FORMAT = "testname"
 local SQL_FORMAT_COMMAND = "sqlfluff"
 
 local function shellescape(value)
@@ -11,19 +11,6 @@ end
 local function current_root(bufnr)
   local filename = vim.api.nvim_buf_get_name(bufnr)
   return vim.fs.root(filename, GO_ROOT_MARKERS) or vim.loop.cwd()
-end
-
-local function relative_package(bufnr)
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-  local root = current_root(bufnr)
-  local directory = vim.fs.dirname(filename)
-  local relative = vim.fs.relpath(root, directory)
-
-  if not relative or relative == "." then
-    return "."
-  end
-
-  return "./" .. relative
 end
 
 local function package_name(filename)
@@ -59,16 +46,7 @@ local function run_in_terminal(command, bufnr)
   require("config.terminal").run({
     cmd = command,
     cwd = current_root(bufnr or 0),
-    slot = "go-test",
-    height = TERMINAL_HEIGHT,
-  })
-end
-
-local function run_gotestsum_watch(package, bufnr)
-  require("config.terminal").run({
-    cmd = "gotestsum --watch --format " .. GOTESTSUM_WATCH_FORMAT .. " " .. package,
-    cwd = current_root(bufnr or 0),
-    slot = "gotestsum-watch",
+    slot = "go-lint",
     height = TERMINAL_HEIGHT,
   })
 end
@@ -111,6 +89,13 @@ end
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function(event)
+    local filename = vim.api.nvim_buf_get_name(event.buf)
+    if filename ~= "" and vim.fn.executable(GOIMPORTS_COMMAND) == 1 then
+      vim.cmd("silent !" .. GOIMPORTS_COMMAND .. " -w " .. shellescape(filename))
+      vim.cmd("checktime")
+      return
+    end
+
     organize_imports(event.buf)
     vim.lsp.buf.format({
       bufnr = event.buf,
@@ -211,32 +196,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<localleader>gi", function()
       organize_imports(buf)
     end, vim.tbl_extend("force", opts, { desc = "Organize imports" }))
-
-    local function test_package()
-      run_in_terminal("go test -v " .. relative_package(buf), buf)
-    end
-
-    local function test_all()
-      run_in_terminal("go test -v ./...", buf)
-    end
-
-    local function watch_package()
-      run_gotestsum_watch(relative_package(buf), buf)
-    end
-
-    local function watch_all()
-      run_gotestsum_watch("./...", buf)
-    end
-
-    vim.keymap.set("n", "<localleader>gt", test_package, vim.tbl_extend("force", opts, { desc = "Go test package" }))
-    vim.keymap.set("n", "<localleader>gT", test_all, vim.tbl_extend("force", opts, { desc = "Go test all packages" }))
-    vim.keymap.set(
-      "n",
-      "<localleader>gw",
-      watch_package,
-      vim.tbl_extend("force", opts, { desc = "Watch package tests" })
-    )
-    vim.keymap.set("n", "<localleader>gW", watch_all, vim.tbl_extend("force", opts, { desc = "Watch all tests" }))
 
     vim.keymap.set("n", "<localleader>gl", function()
       run_in_terminal("golangci-lint run", buf)

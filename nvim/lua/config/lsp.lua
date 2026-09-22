@@ -1,6 +1,9 @@
 local M = {}
 
 M.servers_by_ft = {
+  go = "gopls",
+  gomod = "gopls",
+  gowork = "gopls",
   proto = "buf_ls",
   lua = "lua_ls",
   json = "jsonls",
@@ -38,6 +41,7 @@ function M.on_attach(client, bufnr)
   local opts = { buffer = bufnr, silent = true }
 
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+  vim.keymap.set({ "n", "x" }, "<leader>a", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
   vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Signature help" }))
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
   vim.keymap.set(
@@ -121,8 +125,6 @@ function M.setup_servers()
     root_markers = { ".git" },
     init_options = { provideFormatter = true },
   })
-
-  vim.lsp.enable("gopls")
 
   local group = vim.api.nvim_create_augroup("dotfiles_lsp_ft", { clear = true })
 

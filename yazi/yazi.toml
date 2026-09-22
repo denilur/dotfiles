@@ -3,5 +3,6 @@ show_hidden = true
 
 [opener]
 edit = [
+    { run = 'nvim --remote-silent "$@"', block = false, desc = "Open in Neovim" },
     { run = 'nvim "$@"', block = true, desc = "Open in new Neovim" },
 ]

@@ -24,7 +24,7 @@ end
 
 return {
   "nvim-telescope/telescope.nvim",
-  lazy = true,
+  event = "VeryLazy",
   version = false,
   dependencies = {
     "nvim-lua/plenary.nvim",
@@ -36,6 +36,7 @@ return {
         return vim.fn.executable("make") == 1
       end,
     },
+    "nvim-telescope/telescope-ui-select.nvim",
   },
   keys = {
     {
@@ -96,8 +97,16 @@ return {
           additional_args = { "--hidden", "--glob=!.git" },
         },
       },
+      extensions = {
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown({
+            layout_config = { width = 0.8, height = 0.5 },
+          }),
+        },
+      },
     })
 
     pcall(telescope.load_extension, "fzf")
+    pcall(telescope.load_extension, "ui-select")
   end,
 }

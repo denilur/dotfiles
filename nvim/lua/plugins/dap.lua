@@ -31,13 +31,30 @@ return {
         desc = "Debug: conditional breakpoint",
       },
       { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: toggle UI" },
+      {
+        "<leader>td",
+        function()
+          require("config.go").debug_test()
+        end,
+        desc = "Debug Go test at cursor",
+      },
     },
     config = function()
       local dap = require("dap")
+      local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
 
       require("dapui").setup()
       require("nvim-dap-virtual-text").setup()
-      require("dap-go").setup()
+
+      require("dap-go").setup({
+        dlv_path = function()
+          local mason_dlv = mason_bin .. "/dlv"
+          if vim.fn.executable(mason_dlv) == 1 then
+            return mason_dlv
+          end
+          return "dlv"
+        end,
+      })
 
       dap.listeners.before.attach.dapui_config = function()
         require("dapui").open()
@@ -51,17 +68,6 @@ return {
       dap.listeners.before.event_exited.dapui_config = function()
         require("dapui").close()
       end
-
-      local group = vim.api.nvim_create_augroup("dotfiles_dap_go", { clear = true })
-      vim.api.nvim_create_autocmd("FileType", {
-        group = group,
-        pattern = "go",
-        callback = function(ev)
-          vim.keymap.set("n", "<localleader>gm", function()
-            require("dap-go").debug_test()
-          end, { buffer = ev.buf, desc = "Debug nearest Go test" })
-        end,
-      })
     end,
   },
 }

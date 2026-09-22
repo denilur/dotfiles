@@ -11,7 +11,7 @@ return {
       { "<localleader>e", "<cmd>Yazi cwd<cr>", desc = "Open yazi at cwd" },
     },
     opts = {
-      open_for_directories = true,
+      open_for_directories = false,
       enable_mouse_support = true,
       floating_window_scaling_factor = 0.9,
       yazi_floating_window_border = "rounded",
@@ -31,7 +31,6 @@ return {
   },
   {
     "williamboman/mason.nvim",
-    lazy = false,
     cmd = "Mason",
     build = ":MasonUpdate",
     dependencies = { "WhoIsSethDaniel/mason-tool-installer.nvim" },
@@ -49,6 +48,7 @@ return {
       require("mason-tool-installer").setup({
         ensure_installed = {
           "buf",
+          "delve",
           "goimports",
           "golangci-lint",
           "gofumpt",

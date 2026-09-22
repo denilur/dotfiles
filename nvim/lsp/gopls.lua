@@ -27,12 +27,16 @@ return {
         ST1020 = false,
         ST1021 = false,
       },
+      directoryFilters = {
+        "-**/node_modules",
+        "-**/.git",
+      },
       staticcheck = true,
       gofumpt = true,
       completeUnimported = true,
       usePlaceholders = true,
       semanticTokens = false,
-      diagnosticsDelay = "250ms",
+      diagnosticsDelay = "500ms",
       annotations = {
         bounds = false,
         escape = false,
