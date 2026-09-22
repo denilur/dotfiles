@@ -1,8 +1,9 @@
---- Kanagawa theme tuned for backend work (Go, SQL, Proto, YAML, JSON, Lua).
+--- Kanagawa (dark) + catppuccin-latte (light), tuned for backend work
+--- (Go, SQL, Proto, YAML, JSON, Lua).
 --- Follows macOS Appearance via auto-dark-mode; override with NVIM_BACKGROUND=dark|light
 
 local DARK_THEME = "kanagawa-wave"
-local LIGHT_THEME = "kanagawa-lotus"
+local LIGHT_THEME = "catppuccin-latte"
 local DARK_BACKGROUND = "dark"
 local LIGHT_BACKGROUND = "light"
 local AUTO_DARK_MODE_INTERVAL_MS = 3000
@@ -43,6 +44,21 @@ local function fixed_background()
 end
 
 return {
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      flavour = "latte",
+      transparent_background = false,
+      integrations = {
+        cmp = true,
+        treesitter = true,
+        native_lsp = { enabled = true },
+      },
+    },
+  },
   {
     "rebelot/kanagawa.nvim",
     lazy = false,

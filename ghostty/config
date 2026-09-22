@@ -1,8 +1,8 @@
-# Ghostty — Kanagawa, synced with Neovim (wave / lotus)
+# Ghostty — Kanagawa Wave (dark) / Catppuccin Latte (light), synced with Neovim
 # Reload: Cmd+Shift+,  |  Docs: https://ghostty.org/docs/config
 
 # ── Theme (follows macOS Appearance) ──────────────────────────────────────────
-theme = dark:Kanagawa Wave,light:Kanagawa Lotus
+theme = dark:Kanagawa Wave,light:Catppuccin Latte
 
 window-theme = auto
 

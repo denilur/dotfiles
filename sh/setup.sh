@@ -55,6 +55,9 @@ setup_links_to_config_files() {
     # Home directory links
     symlink "$DOTFILES_DIR/.golangci.yml" "$HOME_DIR/.golangci.yml"
     symlink "$DOTFILES_DIR/.tmux.conf" "$HOME_DIR/.tmux.conf"
+    symlink "$DOTFILES_DIR/.tmux-theme-dark.conf" "$HOME_DIR/.tmux-theme-dark.conf"
+    symlink "$DOTFILES_DIR/.tmux-theme-light.conf" "$HOME_DIR/.tmux-theme-light.conf"
+    symlink "$DOTFILES_DIR/.tmux-theme-watch.sh" "$HOME_DIR/.tmux-theme-watch.sh"
 }
 
 main() {
