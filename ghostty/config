@@ -1,8 +1,8 @@
-# Ghostty — Kanagawa Wave (dark) / Catppuccin Latte (light), synced with Neovim
+# Ghostty — Kanagawa Wave (dark) / Solarized Light (light), synced with Neovim
 # Reload: Cmd+Shift+,  |  Docs: https://ghostty.org/docs/config
 
 # ── Theme (follows macOS Appearance) ──────────────────────────────────────────
-theme = dark:Kanagawa Wave,light:Catppuccin Latte
+theme = dark:Kanagawa Wave,light:iTerm2 Solarized Light
 
 window-theme = auto
 

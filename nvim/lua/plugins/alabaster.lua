@@ -1,9 +1,9 @@
---- Kanagawa (dark) + catppuccin-latte (light), tuned for backend work
+--- Kanagawa (dark) + Solarized (light), tuned for backend work
 --- (Go, SQL, Proto, YAML, JSON, Lua).
 --- Follows macOS Appearance via auto-dark-mode; override with NVIM_BACKGROUND=dark|light
 
 local DARK_THEME = "kanagawa-wave"
-local LIGHT_THEME = "catppuccin-latte"
+local LIGHT_THEME = "solarized"
 local DARK_BACKGROUND = "dark"
 local LIGHT_BACKGROUND = "light"
 local AUTO_DARK_MODE_INTERVAL_MS = 3000
@@ -18,8 +18,8 @@ local function apply_highlights(background)
   hl(0, "LspInfoTitle", { link = "Title" })
 
   if background == LIGHT_BACKGROUND then
-    hl(0, "TermCursor", { bg = "#1f1f28", fg = "#f2ecbc" })
-    hl(0, "TermCursorNC", { bg = "#1f1f28", fg = "#f2ecbc" })
+    hl(0, "TermCursor", { bg = "#002b36", fg = "#fdf6e3" })
+    hl(0, "TermCursorNC", { bg = "#002b36", fg = "#fdf6e3" })
   end
 end
 
@@ -45,19 +45,10 @@ end
 
 return {
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "maxmx03/solarized.nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-      flavour = "latte",
-      transparent_background = false,
-      integrations = {
-        cmp = true,
-        treesitter = true,
-        native_lsp = { enabled = true },
-      },
-    },
+    opts = {},
   },
   {
     "rebelot/kanagawa.nvim",
