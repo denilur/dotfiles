@@ -1,0 +1,23 @@
+# Worktrunk (`wt`) — git worktree workflow. https://worktrunk.dev
+#   wt switch -c feature/x --base=@   new worktree from HEAD
+#   wt switch pr:123                   worktree for a GitHub PR
+#   wt list / wt merge
+
+# Copy lightweight ignored files (.env, local configs) into a new worktree.
+[pre-start]
+copy-ignored = "wt step copy-ignored"
+
+[step.copy-ignored]
+exclude = [
+  "node_modules/",
+  "vendor/",
+  "bin/",
+  "build/",
+  "dist/",
+  ".venv/",
+  "__pycache__/",
+]
+
+# `wt merge` / `wt step commit` generate the commit message with Claude.
+[commit.generation]
+command = "claude -p --model haiku"

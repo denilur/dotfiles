@@ -1,0 +1,78 @@
+# Shared git settings, linked to ~/.config/git/config.
+# Identity, tokens and machine-specific URLs stay in ~/.gitconfig (not in repo);
+# it is read after this file and wins on conflicts.
+
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    lg = log --all --decorate --graph --oneline
+
+[core]
+    editor = nvim
+    ignorecase = false
+    quotePath = false
+    pager = delta
+    excludesFile = ~/.config/git/ignore
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true
+
+[pull]
+    rebase = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+
+[rebase]
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
+
+[commit]
+    verbose = true
+
+[log]
+    date = iso
+
+[column]
+    ui = auto
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+[diff]
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
+
+[help]
+    autocorrect = prompt
+
+[rerere]
+    enabled = true
+    autoUpdate = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    hyperlinks = true
+    hyperlinks-file-link-format = vscode://file{path}:{line}

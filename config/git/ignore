@@ -1,0 +1,39 @@
+# Global gitignore, linked to ~/.config/git/ignore.
+
+# macOS
+.DS_Store
+
+# vim / nvim
+Session.vim
+.nvim.lua
+NetrwTreeListing
+
+# python
+__pycache__/
+*.py[cod]
+
+.aider*
+openai/
+requests/
+.pi/
+
+# Конфиги агентов.
+# Каталоги .claude/ и .cursor/ целиком НЕ игнорируем: в них лежат командные
+# скиллы, правила и слэш-команды, которые должны коммититься в репозиторий.
+# Закрываем только личное и то, что может содержать секреты.
+.claude/settings.local.json
+.claude/history.jsonl
+.claude/todos/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/projects/
+.cursor/mcp.json
+
+# Каталог .agents/ — та же история, что и выше: общая для тулов конвенция,
+# содержимое обычно командное. Игнорируем только локальное состояние.
+.agents/local/
+.agents/*.local.*
+
+CLAUDE.md
+.cursor
+.claude

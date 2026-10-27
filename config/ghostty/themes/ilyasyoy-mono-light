@@ -1,0 +1,25 @@
+# IlyasYOY Monochrome Light — matches nvim ilyasyoy-mono and tmux theme-light.conf
+# Source: github.com/IlyasYOY/dotfiles config/wezterm/wezterm.lua
+background = #eeeeee
+foreground = #000000
+cursor-color = #8787af
+cursor-text = #dadada
+selection-background = #ffaf00
+selection-foreground = #000000
+
+palette = 0=#000000
+palette = 1=#da8d8d
+palette = 2=#8dda9e
+palette = 3=#ffaf00
+palette = 4=#00afff
+palette = 5=#8787af
+palette = 6=#00afaf
+palette = 7=#727272
+palette = 8=#626262
+palette = 9=#ff005f
+palette = 10=#416241
+palette = 11=#ffaf00
+palette = 12=#00afff
+palette = 13=#d787d7
+palette = 14=#87afd7
+palette = 15=#828282

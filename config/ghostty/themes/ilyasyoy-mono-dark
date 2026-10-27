@@ -1,0 +1,25 @@
+# IlyasYOY Monochrome Dark — matches nvim ilyasyoy-mono and tmux theme-dark.conf
+# Source: github.com/IlyasYOY/dotfiles config/wezterm/wezterm.lua
+background = #000000
+foreground = #dadada
+cursor-color = #8787af
+cursor-text = #000000
+selection-background = #ffaf00
+selection-foreground = #000000
+
+palette = 0=#191919
+palette = 1=#722529
+palette = 2=#416241
+palette = 3=#ffaf00
+palette = 4=#00afff
+palette = 5=#8787af
+palette = 6=#00afaf
+palette = 7=#dadada
+palette = 8=#303030
+palette = 9=#ff005f
+palette = 10=#8dda9e
+palette = 11=#ffaf00
+palette = 12=#00afff
+palette = 13=#d787d7
+palette = 14=#87afd7
+palette = 15=#ffffff
